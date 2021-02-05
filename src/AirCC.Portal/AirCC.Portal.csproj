@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>AirCC.Portal.Portal</AssemblyName>
+    <RootNamespace>AirCC.Portal.Portal</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="package.ini" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="package.ini" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AirCCClient.Web\AirCCClient.Web.csproj" />
+  </ItemGroup>
+
+
+</Project>
