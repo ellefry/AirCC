@@ -18,5 +18,9 @@
     <ProjectReference Include="..\AirCCClient.Web\AirCCClient.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApiDtos\" />
+  </ItemGroup>
+
 
 </Project>

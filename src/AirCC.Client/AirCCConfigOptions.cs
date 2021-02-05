@@ -8,13 +8,13 @@ namespace AirCC.Client
     public class AirCCConfigOptions
     {
         public const string SectionName = "AirCC";
-        public const string DefaultFilePath = "AirCC.Settings.ini";
+        public const string DefaultFileName = "AirCC.Settings.ini";
         public string FilePath
         {
             get
             {
                 if (string.IsNullOrWhiteSpace(FileName))
-                    FileName = AirCCConfigOptions.DefaultFilePath;
+                    FileName = AirCCConfigOptions.DefaultFileName;
                 if (!string.IsNullOrWhiteSpace(MainPath))
                     return Path.Combine(MainPath, FileName);
                 else

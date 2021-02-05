@@ -25,7 +25,7 @@ namespace AirCC.Portal
                 //    //configBuilder.AddInMemoryCollection();
                 //    configBuilder.AddIniFile(@"D:\ellefry\package.ini", true, true);
                 //})
-                .AddAirCCFile()
+                .ConfigureAirCCFile()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

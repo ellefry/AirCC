@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 namespace AirCC.Client.Apis
 {
     [ApiController]
-    public class ConfigurationUpdateController
+    public class ConfigurationUpdateController : ControllerBase
     {
-
-        public ConfigurationUpdateController()
-        { 
+        private readonly IAirCCSettingsService airCCSettingsService;
+        public ConfigurationUpdateController(IAirCCSettingsService airCCSettingsService)
+        {
+            this.airCCSettingsService = airCCSettingsService;
         }
 
-        [HttpGet("api/aircc/update")]
-        public async Task<bool> Update()
+        [HttpPost("api/aircc/update")]
+        public async Task Update([FromBody]AirCCSettingCollection airCCSettingCollection)
         {
-            return await Task.FromResult(true);
+            await airCCSettingsService.Update(airCCSettingCollection?.AirCCSettings);
         }
     }
 }

@@ -9,12 +9,13 @@ namespace AirCCClient.Web
 {
     public static class IHostBuilderExtensions
     {
-        public static IHostBuilder AddAirCCFile(this IHostBuilder hostBuilder)
+        public static IHostBuilder ConfigureAirCCFile(this IHostBuilder hostBuilder)
         {
             hostBuilder.ConfigureServices(services => {
                 var config = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
                 var airccOptions = config.GetSection(AirCCConfigOptions.SectionName).Get<AirCCConfigOptions>();
                 services.AddSingleton(airccOptions);
+                services.AddScoped<IAirCCSettingsService, AirCCSettingsService>();
                 if (!string.IsNullOrWhiteSpace(airccOptions.MainPath))
                 {
                     if (!File.Exists(airccOptions.FilePath))
