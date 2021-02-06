@@ -1,5 +1,4 @@
-﻿using AirCC.Client;
-using AirCC.Portal.Models;
+﻿using AirCC.Portal.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +20,7 @@ namespace AirCC.Portal.Controllers
         private readonly IOptionsMonitor<AirCCModel> portalOptionsMonitor;
 
         public ConfigurationsController(IConfiguration configuration, IOptions<AirCCModel> portalOptions, 
-            IOptionsMonitor<AirCCModel> portalOptionsMonitor, AirCCConfigOptions airCCConfigOptions)
+            IOptionsMonitor<AirCCModel> portalOptionsMonitor)
         {
             this.configuration = configuration;
             this.portalOptions = portalOptions;
@@ -49,25 +48,5 @@ namespace AirCC.Portal.Controllers
             //(configuration as IConfigurationRoot).Reload();
             return Ok();
         }
-
-        //public class APIDataService : BackgroundService
-        //{
-        //    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        //    {
-        //        while (!stoppingToken.IsCancellationRequested)
-        //        {
-        //            try
-        //            {
-        //                //需要执行的任务
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                LogHelper.Error(ex.Message);
-        //            }
-        //            await Task.Delay(1000, stoppingToken);//等待1秒
-        //        }
-        //    }
-        //}
     }
 }

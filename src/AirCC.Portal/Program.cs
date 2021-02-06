@@ -1,4 +1,3 @@
-using AirCCClient.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -19,13 +18,6 @@ namespace AirCC.Portal
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                //.ConfigureAppConfiguration(configBuilder =>
-                //{
-                //    //configBuilder.AddJsonFile("dynamic.json", optional: true, reloadOnChange: true);
-                //    //configBuilder.AddInMemoryCollection();
-                //    configBuilder.AddIniFile(@"D:\ellefry\package.ini", true, true);
-                //})
-                .ConfigureAirCCFile()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

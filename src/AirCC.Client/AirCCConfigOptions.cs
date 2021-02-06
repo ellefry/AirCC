@@ -24,5 +24,18 @@ namespace AirCC.Client
         public string MainPath { get; set; }
         public string FileName { get; set; }
 
+        /// <summary>
+        /// Application host url
+        /// </summary>
+        public string PublicOrigin { get; set; }
+        /// <summary>
+        /// AirCC service url
+        /// </summary>
+        public string RegistryServiceUrl { get; set; }
+        /// <summary>
+        /// Application id from AirCC
+        /// </summary>
+        public string ApplicationId { get; set; }
+
     }
 }

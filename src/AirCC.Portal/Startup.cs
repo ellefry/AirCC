@@ -1,6 +1,7 @@
 using AirCC.Portal.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BCI.Extensions.Newtonsoft;
+using BCI.Extensions.Core.Json;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AirCC.Portal
 {
@@ -26,8 +30,10 @@ namespace AirCC.Portal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             //services.AddOptions();
+            
+            services.AddMemoryCache();
             services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();
         }
@@ -39,7 +45,7 @@ namespace AirCC.Portal
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
