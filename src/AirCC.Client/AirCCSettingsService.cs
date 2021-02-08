@@ -20,6 +20,11 @@ namespace AirCC.Client
             this.airCCConfigOptions = airCCConfigOptions;
         }
 
+        /// <summary>
+        /// Update local setttings
+        /// </summary>
+        /// <param name="airCCSettings"></param>
+        /// <returns></returns>
         public async Task Update(IEnumerable<AirCCSetting> airCCSettings)
         {
             StringBuilder stringBuilder = new StringBuilder();
