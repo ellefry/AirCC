@@ -15,9 +15,9 @@ namespace AirCC.Portal.Controllers
     public class RegistryController : ControllerBase
     {
         private readonly IMemoryCache memoryCache;
-        private readonly IApplicationRegistryService applicationRegistryService;
+        private readonly IApplicationRegistryAppService applicationRegistryService;
 
-        public RegistryController(IMemoryCache memoryCache, IApplicationRegistryService applicationRegistryService)
+        public RegistryController(IMemoryCache memoryCache, IApplicationRegistryAppService applicationRegistryService)
         {
             this.memoryCache = memoryCache;
             this.applicationRegistryService = applicationRegistryService;

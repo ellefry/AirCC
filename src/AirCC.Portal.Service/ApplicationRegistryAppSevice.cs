@@ -7,27 +7,27 @@ using System.Text;
 
 namespace AirCC.Portal.Service
 {
-    public class ApplicationRegistrySevice : IApplicationRegistryService
+    public class ApplicationRegistryAppSevice : IApplicationRegistryAppService
     {
         private readonly IMemoryCache memoryCache;
 
-        public ApplicationRegistrySevice(IMemoryCache memoryCache)
+        public ApplicationRegistryAppSevice(IMemoryCache memoryCache)
         {
             this.memoryCache = memoryCache;
         }
 
         public void AddApplication([NotNull]ApplicationRegistry applicationRegistry)
         {
-            if (memoryCache.TryGetValue(applicationRegistry.Id, out var val))
+            if (memoryCache.TryGetValue(applicationRegistry.Id, out ApplicationRegistry val))
             {
                 if (!val.Equals(applicationRegistry))
                 {
-                    memoryCache.Set(applicationRegistry.Id, applicationRegistry, TimeSpan.FromMinutes(60));
+                    memoryCache.Set(applicationRegistry.Id, applicationRegistry, TimeSpan.FromMinutes(20));
                 }
             }
             else
             {
-                memoryCache.Set(applicationRegistry.Id, applicationRegistry, TimeSpan.FromMinutes(60));
+                memoryCache.Set(applicationRegistry.Id, applicationRegistry, TimeSpan.FromMinutes(20));
             }
         }
     }

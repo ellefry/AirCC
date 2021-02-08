@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AirCC.Portal.Service\AirCC.Portal.Service.csproj" />
+    <ProjectReference Include="..\AirCC.Portal.Service\AirCC.Portal.AppService.csproj" />
   </ItemGroup>
 
 

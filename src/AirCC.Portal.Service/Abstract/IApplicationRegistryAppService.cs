@@ -3,7 +3,7 @@ using System;
 
 namespace AirCC.Portal.Service
 {
-    public interface IApplicationRegistryService
+    public interface IApplicationRegistryAppService
     {
         void AddApplication(ApplicationRegistry applicationRegistry);
     }
