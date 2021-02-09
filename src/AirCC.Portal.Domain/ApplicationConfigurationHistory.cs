@@ -5,17 +5,10 @@ using BCI.Extensions.Entity;
 
 namespace AirCC.Portal.Domain
 {
-    public class ApplicationConfiguration : FullAuditEntity<string>
+    public class ApplicationConfigurationHistory : FullAuditEntity<string>
     {
         public string ApplicationId { get; set; }
         public string CfgKey { get; set; }
         public string CfgValue { get; set; }
-        public CfgStatus Status { get; set; }
-    }
-
-    public enum CfgStatus
-    {
-        Offline,
-        Online
     }
 }

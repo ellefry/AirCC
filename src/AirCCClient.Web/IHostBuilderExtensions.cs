@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using AirCCClient.Web.Apis;
+using BCI.Extensions.IdentityClient.Token;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AirCCClient.Web
 {
@@ -24,7 +27,10 @@ namespace AirCCClient.Web
                 //    if (!File.Exists(airccOptions.FilePath))
                 //        File.Create(airccOptions.FilePath);
                 //}
+                
                 services.AddClientServices();
+                services.TryAddScoped<IUpdateAuthorizationService, UpdateAuthorizationService>();
+                services.TryAddTransient<IJwtTokenHandler,JwtTokenHandler>();
             });
 
             hostBuilder = hostBuilder.ConfigureAppConfiguration(configBuilder =>

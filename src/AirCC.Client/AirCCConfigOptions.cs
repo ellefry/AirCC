@@ -36,6 +36,7 @@ namespace AirCC.Client
         /// Application id from AirCC
         /// </summary>
         public string ApplicationId { get; set; }
+        public string ApplicationSecret { get; set; }
 
     }
 }
