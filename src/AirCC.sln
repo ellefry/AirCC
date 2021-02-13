@@ -28,9 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{74CAA6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.AppService", "AirCC.Portal.Service\AirCC.Portal.AppService.csproj", "{2DD1897A-6B37-47D0-93BC-29BB35B22464}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.Data", "AirCC.Portal.Data\AirCC.Portal.Data.csproj", "{5FE0A948-AAE5-4410-A31F-94E59E149C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.EntityFramework", "AirCC.Portal.Data\AirCC.Portal.EntityFramework.csproj", "{5FE0A948-AAE5-4410-A31F-94E59E149C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirCC.Portal.Domain", "AirCC.Portal.Domain\AirCC.Portal.Domain.csproj", "{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.Domain", "AirCC.Portal.Domain\AirCC.Portal.Domain.csproj", "{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

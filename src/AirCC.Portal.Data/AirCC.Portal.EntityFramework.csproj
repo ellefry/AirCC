@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCI.Extensions.EFCore" Version="0.2021.38.1123" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AirCC.Portal.Domain\AirCC.Portal.Domain.csproj" />
   </ItemGroup>
 

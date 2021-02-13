@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCI.Extensions.DDD.ApplicationService" Version="0.2021.38.1123" />
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AirCC.Client\AirCC.Client.csproj" />
+    <ProjectReference Include="..\AirCC.Portal.Domain\AirCC.Portal.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -69,7 +69,7 @@ namespace AirCC.Portal.Domain.DomainServices
             await configurationRepository.UpdateAsync(applicationConfiguration);
         }
 
-        public async Task Online(IEnumerable<string> configurationIds)
+        public async Task OnlineConfigurations(IEnumerable<string> configurationIds)
         {
             var configs = configurationRepository.GetQueryable(c => configurationIds.Contains(c.Id));
             foreach (var c in configs)
@@ -79,7 +79,7 @@ namespace AirCC.Portal.Domain.DomainServices
             await configurationRepository.UpdateAsync(configs);
         }
 
-        public async Task Revert([NotNull]string historyId)
+        public async Task RevertConfiguration([NotNull]string historyId)
         {
             var history = await historyRepository.FindAsync(historyId);
             var current = await configurationRepository.FindAsync(history.ConfigurationId);

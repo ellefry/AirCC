@@ -19,6 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCI.Extensions.EFCore.SqlServer" Version="0.2021.38.1123" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AirCC.Portal.Data\AirCC.Portal.EntityFramework.csproj" />
     <ProjectReference Include="..\AirCC.Portal.Service\AirCC.Portal.AppService.csproj" />
   </ItemGroup>
 

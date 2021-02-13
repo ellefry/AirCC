@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 using BCI.Extensions.Newtonsoft;
 using BCI.Extensions.Core.Json;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using BCI.Extensions.Core.DI;
+using BCI.Extensions.EFCore;
+using AirCC.Portal.EntityFramework;
 
 namespace AirCC.Portal
 {
@@ -31,11 +34,18 @@ namespace AirCC.Portal
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.AddOptions();
-            
+            services.AddHttpContextAccessor();
+            services.AddTypes().AddOptions(Configuration, true);
+
             services.AddMemoryCache();
             services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();
+
+            services.AddSqlServerDbContext<AirCCDbContext>(registerOption =>
+            {
+                registerOption.RegisterRepositories();
+                registerOption.RegisterUnitOfWork();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
