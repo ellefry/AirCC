@@ -18,6 +18,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using BCI.Extensions.Core.DI;
 using BCI.Extensions.EFCore;
 using AirCC.Portal.EntityFramework;
+using AirCC.Portal.AppService;
+using BCI.Extensions.AutoMapper;
 
 namespace AirCC.Portal
 {
@@ -40,7 +42,7 @@ namespace AirCC.Portal
             services.AddMemoryCache();
             services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();
-
+            services.AddMapper(typeof(AutoMapperProfile));
             services.AddSqlServerDbContext<AirCCDbContext>(registerOption =>
             {
                 registerOption.RegisterRepositories();

@@ -8,7 +8,7 @@ namespace AirCC.Portal.Domain.DomainServices
 {
     public interface IApplicationService
     {
-        Task AddConfiguration([NotNull] ApplicationConfiguration applicationConfiguration);
+        Task CreateConfiguration([NotNull] ApplicationConfiguration applicationConfiguration);
         Task Create([NotNull] Application application);
         Task OnlineConfigurations(IEnumerable<string> configurationIds);
         Task RevertConfiguration([NotNull] string historyId);

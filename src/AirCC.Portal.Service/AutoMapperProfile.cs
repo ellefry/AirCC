@@ -1,0 +1,17 @@
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using AirCC.Portal.AppService.ApplicationDtos;
+using AirCC.Portal.Domain;
+
+namespace AirCC.Portal.AppService
+{
+    public class AutoMapperProfile : Profile
+    {
+        public AutoMapperProfile()
+        {
+            CreateMap<ApplicationInput, Application>();
+        }
+    }
+}

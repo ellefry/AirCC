@@ -4,6 +4,7 @@ using AirCC.Portal.Domain;
 using AirCC.Portal.Domain.DomainServices;
 using BCI.Extensions.DDD.ApplicationService;
 using BCI.Extensions.Domain;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,14 +17,27 @@ namespace AirCC.Portal.AppService
     {
         private readonly IApplicationService applicationService;
 
-        public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider) 
+        public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider, 
+            IApplicationService applicationService)
             : base(repository, serviceProvider)
         {
+            this.applicationService = applicationService;
         }
 
-        public async Task Create(ApplicationInput applicationInput)
-        
-        { 
+        public async Task Create([NotNull] ApplicationInput applicationInput)
+        {
+            var application = MapToEntity(applicationInput);
+            await applicationService.Create(application);
         }
+
+        public async Task Update([NotNull] ApplicationInput applicationInput)
+        {
+            //var application = MapToEntity(applicationInput);
+            var application = await GetEntityByIdAsync(applicationInput.Id);
+            application = MapToEntity(applicationInput);
+            await applicationService.Update(application);
+        }
+
+        
     }
 }

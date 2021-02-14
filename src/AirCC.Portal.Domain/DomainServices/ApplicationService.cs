@@ -37,7 +37,7 @@ namespace AirCC.Portal.Domain.DomainServices
             await applicationRepository.UpdateAsync(application);
         }
 
-        public async Task AddConfiguration([NotNull] ApplicationConfiguration applicationConfiguration)
+        public async Task CreateConfiguration([NotNull] ApplicationConfiguration applicationConfiguration)
         {
             var duplicate = configurationRepository.NoTrackingTable
                 .FirstOrDefault(c => c.CfgKey == applicationConfiguration.CfgKey 
