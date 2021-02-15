@@ -11,7 +11,12 @@ namespace AirCC.Portal.AppService
     {
         public AutoMapperProfile()
         {
+            #region Input
             CreateMap<ApplicationInput, Application>();
+            CreateMap<CreateConfigurationInput, ApplicationConfiguration>();
+            #endregion
+
+
         }
     }
 }
