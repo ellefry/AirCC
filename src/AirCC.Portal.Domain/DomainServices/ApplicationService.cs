@@ -86,6 +86,5 @@ namespace AirCC.Portal.Domain.DomainServices
             current.Renew(history.CfgKey, history.CfgValue);
             await UpdateConfiguration(current);
         }
-
     }
 }

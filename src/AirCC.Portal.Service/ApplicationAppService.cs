@@ -1,4 +1,5 @@
-﻿using AirCC.Client.Registry;
+﻿using AirCC.Client;
+using AirCC.Client.Registry;
 using AirCC.Portal.AppService.Abstract;
 using AirCC.Portal.AppService.ApplicationDtos;
 using AirCC.Portal.Domain;
@@ -12,7 +13,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using System.Linq;
 using IApplicationService = AirCC.Portal.Domain.DomainServices.IApplicationService;
+using AirCC.Portal.AppService.Clients;
 
 namespace AirCC.Portal.AppService
 {
@@ -21,15 +24,17 @@ namespace AirCC.Portal.AppService
         private readonly IApplicationService applicationService;
         private readonly IRepository<ApplicationConfiguration, string> configurationRepository;
         private readonly IMemoryCache memoryCache;
+        private readonly ISettingsSender settingsSender;
 
         public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider,
-            IApplicationService applicationService, IRepository<ApplicationConfiguration, string> configurationRepository, 
-            IMemoryCache memoryCache)
+            IApplicationService applicationService, IRepository<ApplicationConfiguration, string> configurationRepository,
+            IMemoryCache memoryCache, ISettingsSender settingsSender)
             : base(repository, serviceProvider)
         {
             this.applicationService = applicationService;
             this.configurationRepository = configurationRepository;
             this.memoryCache = memoryCache;
+            this.settingsSender = settingsSender;
         }
 
         public async Task Create([NotNull] ApplicationInput applicationInput)
@@ -75,21 +80,42 @@ namespace AirCC.Portal.AppService
 
         public async Task DeleteConfiguration([NotNull]string id)
         {
-            //await configurationRepository.DeleteAsync(id);
-            //update settings
             var configuration = await configurationRepository.FindAsync(id);
             var application = await Repository.FindAsync(configuration.ApplicationId);
+
+
+            using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
+                transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
+                    asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
+            configurationRepository.Delete(id);
+            UpdateClientSettings(application.Id).Wait();
+            scope.Complete();
+
+
+        }
+
+        private async Task<AirCCSettingCollection> GetConfigurations([NotNull] string applicationId)
+        {
+            var configurations = await configurationRepository.GetListAsync(c => c.ApplicationId == applicationId);
+            var settings = configurations.Select(c => new AirCCSetting { Key = c.CfgKey, Value = c.CfgValue });
+            return new AirCCSettingCollection { AirCCSettings = settings.ToList() };
+        }
+
+        private async Task<ApplicationRegistry> GetApplicationRegistry(string applicationId)
+        {
+            var application = await Repository.FindAsync(applicationId);
             if (memoryCache.TryGetValue(application.Name, out ApplicationRegistry app))
             {
-
-                using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
-                    transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
-                        asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
-                configurationRepository.Delete(id);
-
-                //send request
-                scope.Complete();
+                return app;
             }
+            throw new ApplicationException($"Can't find registry by application [{application.Name}]");
+        }
+
+        public async Task UpdateClientSettings(string applicationId, Action<string> action = null)
+        {
+            var settings = await GetConfigurations(applicationId);
+            var registry = await GetApplicationRegistry(applicationId);
+            await settingsSender.SendSettings(settings, registry);
         }
     }
 }
