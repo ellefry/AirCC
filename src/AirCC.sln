@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.EntityFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.Domain", "AirCC.Portal.Domain\AirCC.Portal.Domain.csproj", "{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirCC.Portal.Domain.UnitTest", "Tests\AirCC.Portal.Domain.UnitTest\AirCC.Portal.Domain.UnitTest.csproj", "{D97096FF-3C89-4F77-8BEE-A25F45BE858F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D97096FF-3C89-4F77-8BEE-A25F45BE858F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D97096FF-3C89-4F77-8BEE-A25F45BE858F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D97096FF-3C89-4F77-8BEE-A25F45BE858F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D97096FF-3C89-4F77-8BEE-A25F45BE858F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{2DD1897A-6B37-47D0-93BC-29BB35B22464} = {8704E726-0495-4A6C-84E8-2A694978661B}
 		{5FE0A948-AAE5-4410-A31F-94E59E149C8E} = {8704E726-0495-4A6C-84E8-2A694978661B}
 		{1DDBEB4F-41D7-4393-A515-4CC46F1A4C44} = {8704E726-0495-4A6C-84E8-2A694978661B}
+		{D97096FF-3C89-4F77-8BEE-A25F45BE858F} = {A99132C6-34E7-41E7-B9A9-B9AEB39E1E4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {408FF6E7-4D6D-4FF1-98A9-6C1F5B4EADC6}
