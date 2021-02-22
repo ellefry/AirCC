@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirCC.Client\AirCC.Client.csproj" />
+    <ProjectReference Include="..\AirCC.Portal.Data\AirCC.Portal.EntityFramework.csproj" />
     <ProjectReference Include="..\AirCC.Portal.Domain\AirCC.Portal.Domain.csproj" />
   </ItemGroup>
 
