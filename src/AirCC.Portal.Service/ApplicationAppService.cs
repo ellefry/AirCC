@@ -17,6 +17,8 @@ using System.Linq;
 using IApplicationService = AirCC.Portal.Domain.DomainServices.IApplicationService;
 using AirCC.Portal.AppService.Clients;
 using AirCC.Portal.EntityFramework;
+using AutoMapper;
+using BCI.Extensions.Core.ObjectMapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirCC.Portal.AppService
@@ -30,7 +32,7 @@ namespace AirCC.Portal.AppService
 
         public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider,
                     IApplicationService applicationService,
-                    IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext)
+                    IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext, IEntityMappingManager m, IMapper mapper)
                     : base(repository, serviceProvider)
         {
             this.applicationService = applicationService;
@@ -39,24 +41,27 @@ namespace AirCC.Portal.AppService
             this.dbContext = dbContext;
         }
 
-        public async Task Create([NotNull] ApplicationInput applicationInput)
+        public override async Task CreateAsync<TCreateInput>(TCreateInput input)
         {
-            var application = MapToEntity(applicationInput);
-            await applicationService.Create(application);
+            var application = input as ApplicationInput;
+            var newApplication = this.Mapping.Map<ApplicationInput, Application>(application);
+            await applicationService.Create(newApplication);
+            await Repository.SaveChangesAsync();
         }
 
         public async Task Update([NotNull] ApplicationInput applicationInput)
         {
             var application = await GetEntityByIdAsync(applicationInput.Id);
-            application = MapToEntity(applicationInput);
+            MapToEntity(applicationInput, application);
             await applicationService.Update(application);
+            await Repository.SaveChangesAsync();
         }
 
-        public async Task AddConfiguration([NotNull] CreateConfigurationInput input)
+        public async Task AddConfiguration(string appId, [NotNull] CreateConfigurationInput input)
         {
             var applicationConfiguration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);
             var application = await Repository.Table.Include(a => a.Configurations)
-                .FirstOrDefaultAsync(a => a.Id == input.ApplicationId);
+                .FirstOrDefaultAsync(a => a.Id == appId);
             application.AddConfiguration(applicationConfiguration);
             await Repository.SaveChangesAsync();
         }

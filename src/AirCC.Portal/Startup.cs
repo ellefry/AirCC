@@ -20,6 +20,7 @@ using BCI.Extensions.EFCore;
 using AirCC.Portal.EntityFramework;
 using AirCC.Portal.AppService;
 using BCI.Extensions.AutoMapper;
+using BCI.Extensions.Core.ObjectMapping;
 
 namespace AirCC.Portal
 {
@@ -38,7 +39,7 @@ namespace AirCC.Portal
 
             services.AddHttpContextAccessor();
             services.AddTypes().AddOptions(Configuration, true);
-
+            services.TryAddSingleton<IEntityMappingManager,EntityMappingManager>();
             services.AddMemoryCache();
             services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();

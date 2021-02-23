@@ -7,6 +7,7 @@ using AirCC.Portal.AppService.Abstract;
 using AirCC.Portal.AppService.ApplicationDtos;
 using AirCC.Portal.AppService.Clients;
 using AirCC.Portal.Domain;
+using AirCC.Portal.Domain.DomainServices;
 using AirCC.Portal.EntityFramework;
 using BCI.Extensions.DDD.ApplicationService;
 using BCI.Extensions.Domain;
@@ -17,15 +18,23 @@ namespace AirCC.Portal.AppService
 {
     public class ApplicationConfigurationAppService : ApplicationServiceBase<ApplicationConfiguration, string>, IApplicationConfigurationAppService
     {
-        public ApplicationConfigurationAppService(IRepository<ApplicationConfiguration, string> repository, IServiceProvider serviceProvider)
+        private readonly IApplicationConfigurationService configurationService;
+
+        public ApplicationConfigurationAppService(IRepository<ApplicationConfiguration, string> repository, IServiceProvider serviceProvider, IApplicationConfigurationService configurationService)
             : base(repository, serviceProvider)
         {
+            this.configurationService = configurationService;
         }
 
         public async Task Update([NotNull] CreateConfigurationInput input)
         {
-            var configuration = Repository.Table.Include(c => c.ConfigurationHistories)
+            var current = await Repository.Table.Include(c => c.ConfigurationHistories)
                 .FirstOrDefaultAsync(c=>c.Id == input.Id);
+            string key = current.CfgKey;
+            string value = current.CfgValue;
+            MapToEntity(input, current);
+            await configurationService.Update(current, key, value);
+            await Repository.SaveChangesAsync();
         }
     }
 }

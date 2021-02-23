@@ -7,5 +7,6 @@ namespace AirCC.Portal.AppService.Abstract
 {
     public interface IApplicationConfigurationAppService : IScopedDependency
     {
+
     }
 }

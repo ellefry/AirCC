@@ -16,37 +16,13 @@ namespace AirCC.Portal.Domain
 
         private ICollection<ApplicationConfigurationHistory> _configurationHistories;
 
-        public ApplicationConfiguration(string key, string value)
-        {
-            CfgKey = key;
-            CfgValue = value;
-            Status = CfgStatus.Offline;
-        }
 
-        public static ApplicationConfiguration Create(string key, string value)
-        {
-            return new ApplicationConfiguration(key, value);
-        }
-
-        public void Update(string key, string value)
-        {
-            if(_configurationHistories == null)
-                throw  new ApplicationException("You must first retrieve this configuration history list.");
-            _configurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
-            CfgKey = key;
-            CfgValue = value;
-            Status = CfgStatus.Offline;
-        }
-
-        public void AddHistory(string key, string value)
-        {
-            if (_configurationHistories == null)
-                throw new ApplicationException("You must first retrieve this configuration history list.");
-            _configurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
-            CfgKey = key;
-            CfgValue = value;
-            Status = CfgStatus.Offline;
-        }
+        //public void AddHistory()
+        //{
+        //    if (_configurationHistories == null)
+        //        throw new ApplicationException("You must first retrieve this configuration history list.");
+        //    _configurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
+        //}
 
         public void RevertFromHistory(string historyId)
         {

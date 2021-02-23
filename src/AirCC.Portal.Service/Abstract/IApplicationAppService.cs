@@ -1,16 +1,18 @@
 ﻿using AirCC.Portal.AppService.ApplicationDtos;
 using BCI.Extensions.Core.Dependency;
+using BCI.Extensions.DDD.ApplicationService;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AirCC.Portal.Domain;
 
 namespace AirCC.Portal.AppService.Abstract
 {
-    public interface IApplicationAppService : IScopedDependency
+    public interface IApplicationAppService : IApplicationServiceBase<Application, string>, IScopedDependency
     {
-
+        Task AddConfiguration(string appId, [NotNull] CreateConfigurationInput input);
     }
 
     //    public interface IApplicationAppService : IScopedDependency
