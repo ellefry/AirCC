@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="BCI.Extensions.EFCore" Version="0.2021.38.1123" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.4" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
 	    <PrivateAssets>all</PrivateAssets>

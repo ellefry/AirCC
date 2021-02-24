@@ -36,8 +36,6 @@ namespace AirCC.Portal.Domain.DomainServices
             await applicationRepository.UpdateAsync(application);
         }
 
-       
-
     }
 
     //    public class ApplicationService : IApplicationService, IScopedDependency

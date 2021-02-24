@@ -12,9 +12,7 @@ namespace AirCC.Portal.Domain
         public string CfgValue { get; set; }
         public CfgStatus Status { get; set; } = CfgStatus.Offline;
 
-        public IEnumerable<ApplicationConfigurationHistory> ConfigurationHistories => _configurationHistories.ToList();
-
-        private ICollection<ApplicationConfigurationHistory> _configurationHistories;
+        public virtual ICollection<ApplicationConfigurationHistory> ConfigurationHistories { get; private set; }
 
 
         //public void AddHistory()
@@ -26,10 +24,10 @@ namespace AirCC.Portal.Domain
 
         public void RevertFromHistory(string historyId)
         {
-            if (_configurationHistories == null)
+            if (ConfigurationHistories == null)
                 throw new ApplicationException("You must first retrieve this configuration history list.");
-            var history = _configurationHistories.FirstOrDefault(c => c.Id == historyId);
-            _configurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
+            var history = ConfigurationHistories.FirstOrDefault(c => c.Id == historyId);
+            ConfigurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
             if (history == null)
                 throw new ApplicationException("You must first retrieve this configuration history list.");
             CfgKey = history.CfgKey;

@@ -20,7 +20,7 @@ namespace AirCC.Portal.Domain.DomainServices
         {
             var duplicate = repository.NoTrackingTable
                .FirstOrDefault(c => c.Id != applicationConfiguration.Id && c.CfgKey == applicationConfiguration.CfgKey);
-            if (duplicate != null)
+            if (duplicate != null) 
                 throw new ApplicationException($"Duplicated configuration key [{applicationConfiguration.CfgKey}]!");
             await repository.UpdateAsync(applicationConfiguration);
         }

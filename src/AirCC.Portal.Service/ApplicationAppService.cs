@@ -60,8 +60,7 @@ namespace AirCC.Portal.AppService
         public async Task AddConfiguration(string appId, [NotNull] CreateConfigurationInput input)
         {
             var applicationConfiguration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);
-            var application = await Repository.Table.Include(a => a.Configurations)
-                .FirstOrDefaultAsync(a => a.Id == appId);
+            var application = await Repository.Table.FirstOrDefaultAsync(a => a.Id == appId);
             application.AddConfiguration(applicationConfiguration);
             await Repository.SaveChangesAsync();
         }
