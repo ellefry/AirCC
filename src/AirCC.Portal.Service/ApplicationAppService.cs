@@ -29,16 +29,18 @@ namespace AirCC.Portal.AppService
         private readonly IMemoryCache memoryCache;
         private readonly ISettingsSender settingsSender;
         private readonly AirCCDbContext dbContext;
+        private readonly IRepository<ApplicationConfiguration> configurationRepository;
 
         public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider,
                     IApplicationService applicationService,
-                    IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext, IEntityMappingManager m, IMapper mapper)
+                    IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext, IEntityMappingManager m, IMapper mapper, IRepository<ApplicationConfiguration> configurationRepository)
                     : base(repository, serviceProvider)
         {
             this.applicationService = applicationService;
             this.memoryCache = memoryCache;
             this.settingsSender = settingsSender;
             this.dbContext = dbContext;
+            this.configurationRepository = configurationRepository;
         }
 
         public override async Task CreateAsync<TCreateInput>(TCreateInput input)
@@ -63,6 +65,20 @@ namespace AirCC.Portal.AppService
             var application = await Repository.Table.FirstOrDefaultAsync(a => a.Id == appId);
             application.AddConfiguration(applicationConfiguration);
             await Repository.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// No performance issue
+        /// </summary>
+        /// <param name="appId"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task AddConfigurationByRepo(string appId, [NotNull] CreateConfigurationInput input)
+        {
+            var applicationConfiguration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);
+            //var application = await Repository.Table.FirstOrDefaultAsync(a => a.Id == appId);
+            //application.AddConfiguration(applicationConfiguration);
+            await configurationRepository.InsertAsync(applicationConfiguration, true);
         }
     }
 

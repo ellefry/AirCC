@@ -16,19 +16,22 @@ namespace AirCC.Portal.Domain
         
         public void AddConfiguration([NotNull] ApplicationConfiguration cfg)
         {
-            for (int count = 0; count < 10000; count++)
-            {
-                var c = new ApplicationConfiguration {CfgKey = count + "_key", CfgValue = count + "_value"};
-                Configurations.Add(c);
-            }
+            if (Configurations == null)
+                throw new ApplicationException("You must first retrieve this application's configuration list.");
+            var existed = Configurations
+                .Any(c => c.CfgKey == cfg.CfgKey && c.CfgValue == cfg.CfgValue);
+            if (existed)
+                throw new ApplicationException("Duplicate configuration.");
+            Configurations.Add(cfg);
+        }
 
-            //if (Configurations == null)
-            //    throw new ApplicationException("You must first retrieve this application's configuration list.");
-            //var foundConf = Configurations
-            //    .FirstOrDefault(c => c.CfgKey == cfg.CfgKey && c.CfgValue == cfg.CfgValue);
-            //if (foundConf != null)
-            //    throw new ApplicationException("Duplicate configuration.");
-            //Configurations.Add(cfg);
+        public void UpdateConfigurationValue([NotNull] ApplicationConfiguration cfg, string newValue)
+        {
+            if (cfg.CfgValue == newValue) return;
+            var foundConf = Configurations.FirstOrDefault(c => c.Id == cfg.Id);
+
+            if (foundConf != null) foundConf.CfgValue = newValue;
+            
         }
 
     }

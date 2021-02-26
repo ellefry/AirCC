@@ -8,6 +8,7 @@ namespace AirCC.Portal.Domain
 {
     public class ApplicationConfiguration : FullAuditEntity<string>
     {
+        public string ApplicationId { get; set; }
         public string CfgKey { get; set; }
         public string CfgValue { get; set; }
         public CfgStatus Status { get; set; } = CfgStatus.Offline;
@@ -15,12 +16,12 @@ namespace AirCC.Portal.Domain
         public virtual ICollection<ApplicationConfigurationHistory> ConfigurationHistories { get; private set; }
 
 
-        //public void AddHistory()
-        //{
-        //    if (_configurationHistories == null)
-        //        throw new ApplicationException("You must first retrieve this configuration history list.");
-        //    _configurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
-        //}
+        public void AddHistory(string key, string value)
+        {
+            if (ConfigurationHistories == null)
+                throw new ApplicationException("You must first retrieve this configuration history list.");
+            ConfigurationHistories.Add(ApplicationConfigurationHistory.Create(CfgKey, CfgValue));
+        }
 
         public void RevertFromHistory(string historyId)
         {

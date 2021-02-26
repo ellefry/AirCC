@@ -35,5 +35,12 @@ namespace AirCC.Portal.Controllers
             await applicationAppService.AddConfiguration(appId, input);
         }
 
+        [HttpPost("{appId}/v2/addConfiguration")]
+
+        public async Task AddConfigurationv2(string appId, CreateConfigurationInput input)
+        {
+            await applicationAppService.AddConfigurationByRepo(appId, input);
+        }
+
     }
 }

@@ -13,6 +13,7 @@ namespace AirCC.Portal.AppService.Abstract
     public interface IApplicationAppService : IApplicationServiceBase<Application, string>, IScopedDependency
     {
         Task AddConfiguration(string appId, [NotNull] CreateConfigurationInput input);
+        Task AddConfigurationByRepo(string appId, [NotNull] CreateConfigurationInput input);
     }
 
     //    public interface IApplicationAppService : IScopedDependency
