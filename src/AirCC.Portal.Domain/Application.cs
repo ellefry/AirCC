@@ -29,7 +29,6 @@ namespace AirCC.Portal.Domain
         {
             if (cfg.CfgValue == newValue) return;
             var foundConf = Configurations.FirstOrDefault(c => c.Id == cfg.Id);
-
             if (foundConf != null) foundConf.CfgValue = newValue;
             
         }
