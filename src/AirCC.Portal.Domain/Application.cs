@@ -25,12 +25,13 @@ namespace AirCC.Portal.Domain
             Configurations.Add(cfg);
         }
 
-        public void UpdateConfigurationValue([NotNull] ApplicationConfiguration cfg, string newValue)
+        public void UpdateConfigurationValue([NotNull] string configurationId, string newValue)
         {
-            if (cfg.CfgValue == newValue) return;
-            var foundConf = Configurations.FirstOrDefault(c => c.Id == cfg.Id);
-            if (foundConf != null) foundConf.CfgValue = newValue;
-            
+            //f (cfg.CfgValue == newValue) return;
+            var foundConf = Configurations.FirstOrDefault(c => c.Id == configurationId);
+            if (foundConf == null)
+                throw new ApplicationException($"No configuration was found, [{configurationId}].");
+
         }
 
     }
