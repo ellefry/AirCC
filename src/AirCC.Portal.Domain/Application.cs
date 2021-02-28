@@ -27,12 +27,39 @@ namespace AirCC.Portal.Domain
 
         public void UpdateConfigurationValue([NotNull] string configurationId, string newValue)
         {
-            //f (cfg.CfgValue == newValue) return;
+            ApplicationConfiguration foundConf = GetConfiguration(configurationId);
+            foundConf.UpdateValue(newValue);
+        }
+
+        public void Online(string configurationId)
+        {
+            ApplicationConfiguration foundConf = GetConfiguration(configurationId);
+            foundConf.Online();
+        }
+
+        public void Offline(string configurationId)
+        {
+            ApplicationConfiguration foundConf = GetConfiguration(configurationId);
+            foundConf.Offline();
+        }
+
+        public IEnumerable<ApplicationConfiguration> GetConfigurations()
+        {
+            return Configurations;
+        }
+
+        private ApplicationConfiguration GetConfiguration(string configurationId)
+        {
             var foundConf = Configurations.FirstOrDefault(c => c.Id == configurationId);
             if (foundConf == null)
                 throw new ApplicationException($"No configuration was found, [{configurationId}].");
-
+            return foundConf;
         }
 
+        public void DeleteConfiguration(string configurationId)
+        {
+            ApplicationConfiguration foundConf = GetConfiguration(configurationId);
+            Configurations.Remove(foundConf);
+        }
     }
 }

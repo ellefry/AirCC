@@ -18,22 +18,15 @@ namespace AirCC.Portal.AppService
 {
     public class ApplicationConfigurationAppService : ApplicationServiceBase<ApplicationConfiguration, string>, IApplicationConfigurationAppService
     {
-        private readonly IApplicationConfigurationService configurationService;
-
-        public ApplicationConfigurationAppService(IRepository<ApplicationConfiguration, string> repository, IServiceProvider serviceProvider, IApplicationConfigurationService configurationService)
+        public ApplicationConfigurationAppService(IRepository<ApplicationConfiguration, string> repository, IServiceProvider serviceProvider)
             : base(repository, serviceProvider)
         {
-            this.configurationService = configurationService;
         }
 
-        public async Task Update([NotNull] CreateConfigurationInput input)
+        public async Task Revert(string cfgId, string historyId)
         {
-            var current = await Repository.Table.Include(c => c.ConfigurationHistories)
-                .FirstOrDefaultAsync(c=>c.Id == input.Id);
-            string key = current.CfgKey;
-            string value = current.CfgValue;
-            MapToEntity(input, current);
-            await configurationService.Update(current, key, value);
+            var current = await Repository.FindAsync(cfgId);
+            current.RevertFromHistory(historyId);
             await Repository.SaveChangesAsync();
         }
     }

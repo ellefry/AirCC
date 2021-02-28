@@ -9,6 +9,6 @@ namespace AirCC.Portal.Domain.DomainServices
 {
     public interface IApplicationConfigurationService : IScopedDependency
     {
-        Task Update(ApplicationConfiguration applicationConfiguration, string oldKey, string oldValue);
+        
     }
 }

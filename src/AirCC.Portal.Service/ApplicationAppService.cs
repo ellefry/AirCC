@@ -67,6 +67,67 @@ namespace AirCC.Portal.AppService
             await Repository.SaveChangesAsync();
         }
 
+        public async Task UpdateConfigurationValue(string appId, [NotNull] CreateConfigurationInput input)
+        {
+            var application = await Repository.Table.FirstOrDefaultAsync(a => a.Id == appId);
+            application.UpdateConfigurationValue(input.Id, input.CfgValue);
+            await Repository.SaveChangesAsync();
+        }
+
+        public async Task OnlineConfiguration(string appId, string cfgId)
+        {
+            var application = await Repository.FindAsync(appId);
+            application.Online(cfgId);
+            await ExecuteTransaction(UpdateClientSettings, application);
+        }
+
+        public async Task OfflineConfiguration(string appId, string cfgId)
+        {
+            var application = await Repository.FindAsync(appId);
+            application.Offline(cfgId);
+
+            await ExecuteTransaction(UpdateClientSettings, application);
+        }
+
+        public async Task DeleteConfiguration(string appId, string cfgId)
+        {
+            var application = await Repository.FindAsync(appId);
+            application.DeleteConfiguration(cfgId);
+            //await Repository.SaveChangesAsync();
+            //await UpdateClientSettings(application);
+            await ExecuteTransaction(UpdateClientSettings, application);
+        }
+
+        private ApplicationRegistry GetRegeisterApplication(string name)
+        {
+            if (memoryCache.TryGetValue(name, out ApplicationRegistry app))
+            {
+                return app;
+            }
+            throw new ApplicationException($"Can't find registry by application [{name}]");
+        }
+
+        public async Task UpdateClientSettings(Application application)
+        {
+            var settings = application.GetConfigurations().Select(c => new AirCCSetting { Key = c.CfgKey, Value = c.CfgValue });
+            var airCCSettingCollection = new AirCCSettingCollection { AirCCSettings = settings.ToList() };
+            var registry = GetRegeisterApplication(application.Name);
+            await settingsSender.SendSettings(airCCSettingCollection, registry);
+        }
+
+
+        public async Task ExecuteTransaction(Func<Application, Task> action, Application application)
+        {
+            using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
+                transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
+                    asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
+            await Repository.SaveChangesAsync();
+            await action(application);
+            scope.Complete();
+
+
+        }
+
         /// <summary>
         /// No performance issue
         /// </summary>

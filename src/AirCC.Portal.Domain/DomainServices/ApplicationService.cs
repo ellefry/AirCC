@@ -23,7 +23,7 @@ namespace AirCC.Portal.Domain.DomainServices
             var duplicate =
                 applicationRepository.NoTrackingTable.FirstOrDefault(a => a.Name == application.Name);
             if (duplicate != null)
-                throw new ApplicationException($"Duplicated application name [{application.Name}]!");
+                throw new ApplicationException($"Duplicate application name [{application.Name}]!");
             await applicationRepository.InsertAsync(application);
         }
 
@@ -32,7 +32,7 @@ namespace AirCC.Portal.Domain.DomainServices
             var duplicate = applicationRepository.NoTrackingTable
                 .FirstOrDefault(a => a.Id != application.Id && a.Name == application.Name);
             if (duplicate != null)
-                throw new ApplicationException($"Duplicated application name [{application.Name}]!");
+                throw new ApplicationException($"Duplicate application name [{application.Name}]!");
             await applicationRepository.UpdateAsync(application);
         }
 

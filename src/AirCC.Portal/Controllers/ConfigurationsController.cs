@@ -1,4 +1,5 @@
-﻿using AirCC.Portal.Models;
+﻿using AirCC.Portal.AppService.Abstract;
+using AirCC.Portal.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,38 +16,17 @@ namespace AirCC.Portal.Controllers
     [ApiController]
     public class ConfigurationsController : ControllerBase
     {
-        private readonly IConfiguration configuration;
-        private readonly IOptions<AirCCModel> portalOptions;
-        private readonly IOptionsMonitor<AirCCModel> portalOptionsMonitor;
+        private readonly IApplicationConfigurationAppService configurationAppService;
 
-        public ConfigurationsController(IConfiguration configuration, IOptions<AirCCModel> portalOptions, 
-            IOptionsMonitor<AirCCModel> portalOptionsMonitor)
+        public ConfigurationsController(IApplicationConfigurationAppService configurationAppService)
         {
-            this.configuration = configuration;
-            this.portalOptions = portalOptions;
-            this.portalOptionsMonitor = portalOptionsMonitor;
+            this.configurationAppService = configurationAppService;
         }
 
-        [HttpGet]
-
-        public IActionResult Get()
+        [HttpPost("{cfgId}/Revert/{historyId}")]
+        public async Task Revert(string cfgId, string historyId)
         {
-            return Ok(new
-            {
-                Number = configuration["dynamic"],
-                VersionNormal = portalOptions.Value?.Version,
-                VersionMinitor = portalOptionsMonitor.CurrentValue?.Version
-            });
-        }
-
-        [HttpGet("put/{v}")]
-        public IActionResult Put(string v)
-        {
-
-            //var mem = (configuration as IConfigurationRoot).Providers.FirstOrDefault(c => c.GetType().Name == "MemoryConfigurationProvider") as MemoryConfigurationProvider;
-            //mem.Add("AirCC:Version", v);
-            //(configuration as IConfigurationRoot).Reload();
-            return Ok();
+            await configurationAppService.Revert(cfgId, historyId);
         }
     }
 }
