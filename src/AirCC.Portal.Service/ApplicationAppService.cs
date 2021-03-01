@@ -85,7 +85,6 @@ namespace AirCC.Portal.AppService
         {
             var application = await Repository.FindAsync(appId);
             application.Offline(cfgId);
-
             await ExecuteTransaction(UpdateClientSettings, application);
         }
 
@@ -93,10 +92,14 @@ namespace AirCC.Portal.AppService
         {
             var application = await Repository.FindAsync(appId);
             application.DeleteConfiguration(cfgId);
-            //await Repository.SaveChangesAsync();
-            //await UpdateClientSettings(application);
             await ExecuteTransaction(UpdateClientSettings, application);
         }
+
+        //public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input)
+        //{
+        //    var application = await Repository.FindAsync(appId);
+        //    return await application.GetConfigurations().AsQueryable().ToPageAsync(input.CurrentIndex, input.PageSize);
+        //}
 
         private ApplicationRegistry GetRegeisterApplication(string name)
         {
@@ -104,10 +107,11 @@ namespace AirCC.Portal.AppService
             {
                 return app;
             }
-            throw new ApplicationException($"Can't find registry by application [{name}]");
+            return new ApplicationRegistry { Id = "AirCC" };
+            //throw new ApplicationException($"Can't find registry by application [{name}]");
         }
 
-        public async Task UpdateClientSettings(Application application)
+        private async Task UpdateClientSettings(Application application)
         {
             var settings = application.GetConfigurations().Select(c => new AirCCSetting { Key = c.CfgKey, Value = c.CfgValue });
             var airCCSettingCollection = new AirCCSettingCollection { AirCCSettings = settings.ToList() };
@@ -115,8 +119,7 @@ namespace AirCC.Portal.AppService
             await settingsSender.SendSettings(airCCSettingCollection, registry);
         }
 
-
-        public async Task ExecuteTransaction(Func<Application, Task> action, Application application)
+        private async Task ExecuteTransaction(Func<Application, Task> action, Application application)
         {
             using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
                 transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
@@ -124,23 +127,8 @@ namespace AirCC.Portal.AppService
             await Repository.SaveChangesAsync();
             await action(application);
             scope.Complete();
-
-
         }
 
-        /// <summary>
-        /// No performance issue
-        /// </summary>
-        /// <param name="appId"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public async Task AddConfigurationByRepo(string appId, [NotNull] CreateConfigurationInput input)
-        {
-            var applicationConfiguration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);
-            //var application = await Repository.Table.FirstOrDefaultAsync(a => a.Id == appId);
-            //application.AddConfiguration(applicationConfiguration);
-            await configurationRepository.InsertAsync(applicationConfiguration, true);
-        }
     }
 
 
