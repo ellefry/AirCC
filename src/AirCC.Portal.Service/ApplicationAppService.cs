@@ -95,11 +95,13 @@ namespace AirCC.Portal.AppService
             await ExecuteTransaction(UpdateClientSettings, application);
         }
 
-        //public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input)
-        //{
-        //    var application = await Repository.FindAsync(appId);
-        //    return await application.GetConfigurations().AsQueryable().ToPageAsync(input.CurrentIndex, input.PageSize);
-        //}
+        public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input)
+        {
+            var application = await Repository.FindAsync(appId);
+            return await this.Mapping.Map<ConfigurationListOutput>(application.GetConfigurations().AsQueryable())
+                .ToPageAsync(input.CurrentIndex, input.PageSize, "Id");
+            //return await application.GetConfigurations().AsQueryable().ToPageAsync(input.CurrentIndex, input.PageSize);
+        }
 
         private ApplicationRegistry GetRegeisterApplication(string name)
         {

@@ -14,6 +14,7 @@ namespace AirCC.Portal.AppService
             #region Input
             CreateMap<ApplicationInput, Application>();
             CreateMap<CreateConfigurationInput, ApplicationConfiguration>();
+            CreateMap<ApplicationConfiguration, ConfigurationListOutput>();
             #endregion
 
 
