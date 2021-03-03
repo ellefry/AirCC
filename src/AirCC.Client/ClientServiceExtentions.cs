@@ -19,12 +19,14 @@ namespace AirCC.Client
             var airccOptions = config.GetSection(AirCCConfigOptions.SectionName).Get<AirCCConfigOptions>();
             if (airccOptions == null)
                 throw new ApplicationException($"No {AirCCConfigOptions.SectionName} configuration");
-
+            services.AddSingleton(airccOptions);
             services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.AddScoped<IAirCCSettingsService, AirCCSettingsService>();
             services.AddHostedService<RegistrySyncModule>();
             if (!string.IsNullOrWhiteSpace(airccOptions.MainPath))
             {
+                if (!Directory.Exists(airccOptions.MainPath))
+                    Directory.CreateDirectory(airccOptions.MainPath);
                 if (!File.Exists(airccOptions.FilePath))
                     File.Create(airccOptions.FilePath);
             }

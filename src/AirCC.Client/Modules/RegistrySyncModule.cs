@@ -4,7 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +37,12 @@ namespace AirCC.Client.Modules
                     HttpClient httpClient = new HttpClient();
                     var url = $"{airCCConfigOptions.RegistryServiceUrl.TrimEnd('/')}/api/registry/register";
                     HttpContent httpContent = new StringContent(jsonSerializer.Serialize(app));
-                    await httpClient.PostAsync(url, httpContent);
+                    httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+                    var response = await httpClient.PostAsync(url, httpContent);
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        logger.LogError($"[Registry error:] {await response.Content.ReadAsStringAsync()}");
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,5 @@
 ﻿using AirCC.Client.Registry;
+using BCI.Extensions.Core.Dependency;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace AirCC.Portal.Service
 {
-    public class ApplicationRegistryAppSevice : IApplicationRegistryAppService
+    public class ApplicationRegistryAppSevice : IApplicationRegistryAppService , IScopedDependency
     {
         private readonly IMemoryCache memoryCache;
 

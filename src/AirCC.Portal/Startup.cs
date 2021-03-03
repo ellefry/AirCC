@@ -21,6 +21,8 @@ using AirCC.Portal.EntityFramework;
 using AirCC.Portal.AppService;
 using BCI.Extensions.AutoMapper;
 using BCI.Extensions.Core.ObjectMapping;
+using AirCC.Portal.AppService.Clients;
+using AirCC.Portal.Infrastructure;
 
 namespace AirCC.Portal
 {
@@ -40,6 +42,8 @@ namespace AirCC.Portal
             services.AddHttpContextAccessor();
             services.AddTypes().AddOptions(Configuration, true);
             services.TryAddSingleton<IEntityMappingManager,EntityMappingManager>();
+            services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
+            services.TryAddSingleton<ISettingsSender, HttpSettingSender>();
             services.AddMemoryCache();
             services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();
@@ -51,7 +55,6 @@ namespace AirCC.Portal
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

@@ -100,7 +100,6 @@ namespace AirCC.Portal.AppService
             var application = await Repository.FindAsync(appId);
             return await this.Mapping.Map<ConfigurationListOutput>(application.GetConfigurations().AsQueryable())
                 .ToPageAsync(input.CurrentIndex, input.PageSize, "Id");
-            //return await application.GetConfigurations().AsQueryable().ToPageAsync(input.CurrentIndex, input.PageSize);
         }
 
         private ApplicationRegistry GetRegeisterApplication(string name)
@@ -109,8 +108,8 @@ namespace AirCC.Portal.AppService
             {
                 return app;
             }
-            return new ApplicationRegistry { Id = "AirCC" };
-            //throw new ApplicationException($"Can't find registry by application [{name}]");
+            //return new ApplicationRegistry { Id = "AirCC" };
+            throw new ApplicationException($"Can't find registry by application [{name}]");
         }
 
         private async Task UpdateClientSettings(Application application)

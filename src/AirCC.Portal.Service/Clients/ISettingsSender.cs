@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AirCC.Portal.AppService.Clients
 {
-    public interface ISettingsSender : IScopedDependency
+    public interface ISettingsSender
     {
         Task SendSettings(AirCCSettingCollection settings, ApplicationRegistry registry);
     }

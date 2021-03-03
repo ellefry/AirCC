@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AirCC.Portal.Data\AirCC.Portal.EntityFramework.csproj" />
+    <ProjectReference Include="..\AirCC.Portal.Infrastructure\AirCC.Portal.Infrastructure.csproj" />
     <ProjectReference Include="..\AirCC.Portal.Service\AirCC.Portal.AppService.csproj" />
   </ItemGroup>
 

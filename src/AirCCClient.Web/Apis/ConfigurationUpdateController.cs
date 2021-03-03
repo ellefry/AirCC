@@ -23,15 +23,16 @@ namespace AirCC.Client.Apis
         [HttpPost("api/aircc/update")]
         public async Task Update([FromBody]AirCCSettingCollection airCCSettingCollection)
         {
-            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(' ')?.Last();
-            if (authorizationService.Validate(token))
-            {
-                await airCCSettingsService.Update(airCCSettingCollection?.AirCCSettings);
-            }
-            else
-            {
-                await Task.FromResult(new BadRequestResult());
-            }
+            //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(' ')?.Last();
+            //if (authorizationService.Validate(token))
+            //{
+            //    await airCCSettingsService.Update(airCCSettingCollection?.AirCCSettings);
+            //}
+            //else
+            //{
+            //    await Task.FromResult(new BadRequestResult());
+            //}
+            await airCCSettingsService.Update(airCCSettingCollection?.AirCCSettings);
         }
     }
 }
