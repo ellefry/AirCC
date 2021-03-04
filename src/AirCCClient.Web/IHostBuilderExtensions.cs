@@ -16,18 +16,6 @@ namespace AirCCClient.Web
         public static IHostBuilder ConfigureAirCCFile(this IHostBuilder hostBuilder)
         {
             hostBuilder.ConfigureServices(services => {
-                //var config = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-                //var airccOptions = config.GetSection(AirCCConfigOptions.SectionName).Get<AirCCConfigOptions>();
-                //if (airccOptions == null)
-                //    throw new ApplicationException($"No {AirCCConfigOptions.SectionName} configuration");
-                //services.AddSingleton(airccOptions);
-                //services.AddClientServices();
-                //if (!string.IsNullOrWhiteSpace(airccOptions.MainPath))
-                //{
-                //    if (!File.Exists(airccOptions.FilePath))
-                //        File.Create(airccOptions.FilePath);
-                //}
-                
                 services.AddClientServices();
                 services.TryAddScoped<IUpdateAuthorizationService, UpdateAuthorizationService>();
                 services.TryAddTransient<IJwtTokenHandler,JwtTokenHandler>();
