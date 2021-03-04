@@ -38,14 +38,13 @@ namespace AirCC.Portal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddHttpContextAccessor();
             services.AddTypes().AddOptions(Configuration, true);
             services.TryAddSingleton<IEntityMappingManager,EntityMappingManager>();
             services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.TryAddSingleton<ISettingsSender, HttpSettingSender>();
             services.AddMemoryCache();
-            services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
+            //services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();
             services.AddMapper(typeof(AutoMapperProfile));
             services.AddSqlServerDbContext<AirCCDbContext>(registerOption =>
