@@ -23,6 +23,7 @@ using BCI.Extensions.AutoMapper;
 using BCI.Extensions.Core.ObjectMapping;
 using AirCC.Portal.AppService.Clients;
 using AirCC.Portal.Infrastructure;
+using AirCC.Portal.WebServers;
 
 namespace AirCC.Portal
 {
@@ -44,6 +45,7 @@ namespace AirCC.Portal
             services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.TryAddSingleton<ISettingsSender, HttpSettingSender>();
             services.AddMemoryCache();
+            services.AddWebSocketServer(Configuration);
             //services.Configure<AirCCModel>(Configuration.GetSection("AirCC"));
             services.AddControllers();
             services.AddMapper(typeof(AutoMapperProfile));

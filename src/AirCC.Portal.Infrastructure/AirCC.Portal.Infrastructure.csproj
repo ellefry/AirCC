@@ -8,4 +8,8 @@
     <ProjectReference Include="..\AirCC.Portal.Service\AirCC.Portal.AppService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WatsonWebsocket" Version="2.2.1.3" />
+  </ItemGroup>
+
 </Project>

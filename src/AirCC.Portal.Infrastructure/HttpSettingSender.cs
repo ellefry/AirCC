@@ -12,7 +12,7 @@ namespace AirCC.Portal.Infrastructure
 {
     public class HttpSettingSender : ISettingsSender
     {
-        readonly IJsonSerializer jsonSerializer;
+        private readonly IJsonSerializer jsonSerializer;
 
         public HttpSettingSender(IJsonSerializer jsonSerializer)
         {

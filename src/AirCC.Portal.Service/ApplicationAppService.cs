@@ -32,9 +32,10 @@ namespace AirCC.Portal.AppService
         private readonly IRepository<ApplicationConfiguration> configurationRepository;
 
         public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider,
-                    IApplicationService applicationService,
-                    IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext, IEntityMappingManager m, IMapper mapper, IRepository<ApplicationConfiguration> configurationRepository)
-                    : base(repository, serviceProvider)
+            IApplicationService applicationService,
+            IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext, IEntityMappingManager m,
+            IMapper mapper, IRepository<ApplicationConfiguration> configurationRepository)
+            : base(repository, serviceProvider)
         {
             this.applicationService = applicationService;
             this.memoryCache = memoryCache;
@@ -95,141 +96,45 @@ namespace AirCC.Portal.AppService
             await ExecuteTransaction(UpdateClientSettings, application);
         }
 
-        public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input)
+        public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId,
+            ConfigurationListInput input)
         {
             var application = await Repository.FindAsync(appId);
             return await this.Mapping.Map<ConfigurationListOutput>(application.GetConfigurations().AsQueryable())
                 .ToPageAsync(input.CurrentIndex, input.PageSize, "Id");
         }
 
-        private ApplicationRegistry GetRegeisterApplication(string name)
+        private ApplicationRegistry GetRegisterApplication(string name)
         {
             if (memoryCache.TryGetValue(name, out ApplicationRegistry app))
             {
                 return app;
             }
+
             //return new ApplicationRegistry { Id = "AirCC" };
             throw new ApplicationException($"Can't find registry by application [{name}]");
         }
 
         private async Task UpdateClientSettings(Application application)
         {
-            var settings = application.GetConfigurations().Select(c => new AirCCSetting { Key = c.CfgKey, Value = c.CfgValue });
-            var airCCSettingCollection = new AirCCSettingCollection { AirCCSettings = settings.ToList() };
-            var registry = GetRegeisterApplication(application.Name);
+            var settings = application.GetConfigurations()
+                .Select(c => new AirCCSetting {Key = c.CfgKey, Value = c.CfgValue});
+            var airCCSettingCollection = new AirCCSettingCollection {AirCCSettings = settings.ToList()};
+            var registry = GetRegisterApplication(application.Name);
             await settingsSender.SendSettings(airCCSettingCollection, registry);
         }
 
         private async Task ExecuteTransaction(Func<Application, Task> action, Application application)
         {
             using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
-                transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
-                    asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
+                transactionOptions: new TransactionOptions {IsolationLevel = IsolationLevel.RepeatableRead},
+                asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
             await Repository.SaveChangesAsync();
             await action(application);
             scope.Complete();
         }
 
     }
-
-
-    //    public class ApplicationAppService : ApplicationServiceBase<Application,string>, IApplicationAppService
-    //    {
-    //        private readonly IApplicationService applicationService;
-    //        private readonly IRepository<ApplicationConfiguration, string> configurationRepository;
-    //        private readonly IMemoryCache memoryCache;
-    //        private readonly ISettingsSender settingsSender;
-
-    //        public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider,
-    //            IApplicationService applicationService, IRepository<ApplicationConfiguration, string> configurationRepository,
-    //            IMemoryCache memoryCache, ISettingsSender settingsSender)
-    //            : base(repository, serviceProvider)
-    //        {
-    //            this.applicationService = applicationService;
-    //            this.configurationRepository = configurationRepository;
-    //            this.memoryCache = memoryCache;
-    //            this.settingsSender = settingsSender;
-    //        }
-
-    //        public async Task Create([NotNull] ApplicationInput applicationInput)
-    //        {
-    //            var application = MapToEntity(applicationInput);
-    //            await applicationService.Create(application);
-    //        }
-
-    //        public async Task Update([NotNull] ApplicationInput applicationInput)
-    //        {
-    //            var application = await GetEntityByIdAsync(applicationInput.Id);
-    //            application = MapToEntity(applicationInput);
-    //            await applicationService.Update(application);
-    //        }
-
-    //        public async Task CreateConfiguration([NotNull] CreateConfigurationInput input)
-    //        {
-    //            var applicationConfiguration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);
-    //            await applicationService.AddConfiguration(applicationConfiguration);
-    //        }
-
-    //        public async Task UpdateConfiguration([NotNull] CreateConfigurationInput input)
-    //        {
-    //            var configuration = await configurationRepository.FindAsync(input.Id);
-    //            configuration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);
-    //            await applicationService.UpdateConfiguration(configuration);
-    //        }
-
-    //        public async Task OnlineConfigurations(OnlineInput input)
-    //        {
-    //            await applicationService.OnlineConfigurations(input.ConfigurationIds);
-    //        }
-
-    //        public async Task OnlinConfiguration([NotNull] string id)
-    //        {
-    //            await applicationService.OnlineConfigurations(new List<string> { id });
-    //        }
-
-    //        public async Task RevertConfiguration([NotNull] string historyId)
-    //        {
-    //            await applicationService.RevertConfiguration(historyId);
-    //        }
-
-    //        public async Task DeleteConfiguration([NotNull]string id)
-    //        {
-    //            var configuration = await configurationRepository.FindAsync(id);
-    //            var application = await Repository.FindAsync(configuration.ApplicationId);
-
-
-    //            using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
-    //                transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
-    //                    asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
-    //            configurationRepository.Delete(id);
-    //            UpdateClientSettings(application.Id).Wait();
-    //            scope.Complete();
-
-
-    //        }
-
-    //        private async Task<AirCCSettingCollection> GetConfigurations([NotNull] string applicationId)
-    //        {
-    //            var configurations = await configurationRepository.GetListAsync(c => c.ApplicationId == applicationId);
-    //            var settings = configurations.Select(c => new AirCCSetting { Key = c.CfgKey, Value = c.CfgValue });
-    //            return new AirCCSettingCollection { AirCCSettings = settings.ToList() };
-    //        }
-
-    //        private async Task<ApplicationRegistry> GetApplicationRegistry(string applicationId)
-    //        {
-    //            var application = await Repository.FindAsync(applicationId);
-    //            if (memoryCache.TryGetValue(application.Name, out ApplicationRegistry app))
-    //            {
-    //                return app;
-    //            }
-    //            throw new ApplicationException($"Can't find registry by application [{application.Name}]");
-    //        }
-
-    //        public async Task UpdateClientSettings(string applicationId, Action<string> action = null)
-    //        {
-    //            var settings = await GetConfigurations(applicationId);
-    //            var registry = await GetApplicationRegistry(applicationId);
-    //            await settingsSender.SendSettings(settings, registry);
-    //        }
-    //    }
 }
+
+    
