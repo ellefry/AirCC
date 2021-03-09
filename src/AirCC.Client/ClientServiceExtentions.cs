@@ -11,24 +11,25 @@ using System.Text;
 
 namespace AirCC.Client
 {
-    public static class ClientServiceExtentions
+    public static class ClientServiceExtensions
     {
         public static void AddClientServices(this IServiceCollection services)
         {
             var config = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            var airccOptions = config.GetSection(AirCCConfigOptions.SectionName).Get<AirCCConfigOptions>();
-            if (airccOptions == null)
+            var airCcConfigOptions = config.GetSection(AirCCConfigOptions.SectionName).Get<AirCCConfigOptions>();
+            if (airCcConfigOptions == null)
                 throw new ApplicationException($"No {AirCCConfigOptions.SectionName} configuration");
-            services.AddSingleton(airccOptions);
+            services.AddSingleton(airCcConfigOptions);
             services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
-            services.AddScoped<IAirCCSettingsService, AirCCSettingsService>();
+            services.TryAddSingleton<IAirCCSettingsService, AirCCSettingsService>();
+            services.AddSingleton<AirCCWsClient>();
             services.AddHostedService<RegistrySyncModule>();
-            if (!string.IsNullOrWhiteSpace(airccOptions.MainPath))
+            if (!string.IsNullOrWhiteSpace(airCcConfigOptions.MainPath))
             {
-                if (!Directory.Exists(airccOptions.MainPath))
-                    Directory.CreateDirectory(airccOptions.MainPath);
-                if (!File.Exists(airccOptions.FilePath))
-                    File.Create(airccOptions.FilePath);
+                if (!Directory.Exists(airCcConfigOptions.MainPath))
+                    Directory.CreateDirectory(airCcConfigOptions.MainPath);
+                if (!File.Exists(airCcConfigOptions.FilePath))
+                    File.Create(airCcConfigOptions.FilePath);
             }
         }
     }

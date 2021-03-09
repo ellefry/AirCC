@@ -120,8 +120,7 @@ namespace AirCC.Portal.AppService
             var settings = application.GetConfigurations()
                 .Select(c => new AirCCSetting {Key = c.CfgKey, Value = c.CfgValue});
             var airCCSettingCollection = new AirCCSettingCollection {AirCCSettings = settings.ToList()};
-            var registry = GetRegisterApplication(application.Name);
-            await settingsSender.SendSettings(airCCSettingCollection, registry);
+            await settingsSender.SendSettings(airCCSettingCollection, application.Name);
         }
 
         private async Task ExecuteTransaction(Func<Application, Task> action, Application application)

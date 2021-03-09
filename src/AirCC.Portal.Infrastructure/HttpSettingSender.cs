@@ -26,5 +26,10 @@ namespace AirCC.Portal.Infrastructure
             httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             await new HttpClient().PostAsync(registry.Url + "/api/aircc/update", httpContent);
         }
+
+        public Task SendSettings(AirCCSettingCollection settings, string appId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

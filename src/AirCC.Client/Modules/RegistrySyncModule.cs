@@ -18,13 +18,15 @@ namespace AirCC.Client.Modules
         private readonly ILogger<RegistrySyncModule> logger;
         private readonly AirCCConfigOptions airCCConfigOptions;
         private readonly IJsonSerializer jsonSerializer;
+        private readonly AirCCWsClient airCcWsClient;
 
         public RegistrySyncModule(ILogger<RegistrySyncModule> logger, AirCCConfigOptions aicCCConfigOptions, 
-            IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer, AirCCWsClient airCcWsClient)
         {
             this.logger = logger;
             this.airCCConfigOptions = aicCCConfigOptions;
             this.jsonSerializer = jsonSerializer;
+            this.airCcWsClient = airCcWsClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -33,16 +35,17 @@ namespace AirCC.Client.Modules
             {
                 try
                 {
-                    var app = new ApplicationRegistry { Id = airCCConfigOptions.ApplicationId,Url = airCCConfigOptions.PublicOrigin };
-                    HttpClient httpClient = new HttpClient();
-                    var url = $"{airCCConfigOptions.RegistryServiceUrl.TrimEnd('/')}/api/registry/register";
-                    HttpContent httpContent = new StringContent(jsonSerializer.Serialize(app));
-                    httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-                    var response = await httpClient.PostAsync(url, httpContent);
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        logger.LogError($"[Registry error:] {await response.Content.ReadAsStringAsync()}");
-                    }
+                    //var app = new ApplicationRegistry { Id = airCCConfigOptions.ApplicationId,Url = airCCConfigOptions.PublicOrigin };
+                    //HttpClient httpClient = new HttpClient();
+                    //var url = $"{airCCConfigOptions.RegistryServiceUrl.TrimEnd('/')}/api/registry/register";
+                    //HttpContent httpContent = new StringContent(jsonSerializer.Serialize(app));
+                    //httpContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+                    //var response = await httpClient.PostAsync(url, httpContent);
+                    //if (response.StatusCode != HttpStatusCode.OK)
+                    //{
+                    //    logger.LogError($"[Registry error:] {await response.Content.ReadAsStringAsync()}");
+                    //}
+                    airCcWsClient.Initialize();
                 }
                 catch (Exception ex)
                 {

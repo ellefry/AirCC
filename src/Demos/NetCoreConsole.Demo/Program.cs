@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Net.WebSockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
+using AirCC.Client;
 using WatsonWebsocket;
 
 namespace NetCoreConsole.Demo
@@ -10,7 +13,8 @@ namespace NetCoreConsole.Demo
     {
         static void Main(string[] args)
         {
-            WatsonWsClient client = new WatsonWsClient("localhost", 4999, false);
+            //WatsonWsClient client = new WatsonWsClient("localhost", 4999, false);
+            WatsonWsClient client = new WatsonWsClient(new Uri("ws://localhost:4999?token=test&appId=AirCC"));
             client.ServerConnected += ServerConnected;
             client.ServerDisconnected += ServerDisconnected;
             client.MessageReceived += MessageReceived;
@@ -18,7 +22,14 @@ namespace NetCoreConsole.Demo
 
             static void MessageReceived(object sender, MessageReceivedEventArgs args)
             {
-                Console.WriteLine("Message from server: " + Encoding.UTF8.GetString(args.Data));
+                using var ms = new MemoryStream(args.Data);
+                BinaryFormatter bf = new BinaryFormatter();
+                var settings = bf.Deserialize(ms) as AirCCSettingCollection;
+                foreach (var item in settings.AirCCSettings)
+                {
+                    Console.WriteLine($"{item.Key} : {item.Value}");
+                }
+                //Console.WriteLine("Message from server: " + Encoding.UTF8.GetString(args.Data));
             }
 
             static void ServerConnected(object sender, EventArgs args)
