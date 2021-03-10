@@ -8,14 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="package.ini" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="package.ini" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="ApiDtos\" />
   </ItemGroup>
 

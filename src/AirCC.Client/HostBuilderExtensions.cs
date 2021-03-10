@@ -5,14 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
-//using BCI.Extensions.IdentityClient.Token;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AirCC.Client
 {
-    public static class IHostBuilderExtensions
+    public static class HostBuilderExtensions
     {
-        public static IHostBuilder ConfigureAirCCFile(this IHostBuilder hostBuilder)
+        public static IHostBuilder ConfigureAirCcFile(this IHostBuilder hostBuilder)
         {
             hostBuilder.ConfigureServices(services => {
                 services.AddClientServices();

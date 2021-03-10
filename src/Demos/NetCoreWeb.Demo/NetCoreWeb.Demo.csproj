@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AirCCClient.Web\AirCCClient.Web.csproj" />
+    <ProjectReference Include="..\..\AirCC.Client\AirCC.Client.csproj" />
   </ItemGroup>
 
 

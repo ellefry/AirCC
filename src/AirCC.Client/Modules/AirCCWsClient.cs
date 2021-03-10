@@ -12,21 +12,21 @@ using WatsonWebsocket;
 
 namespace AirCC.Client.Modules
 {
-    public class AirCCWsClient
+    public class AirCcWsClient
     {
-        private readonly AirCCConfigOptions airCCConfigOptions;
+        private readonly AirCCConfigOptions airCcConfigOptions;
         private readonly IAirCCSettingsService airCcSettingsService;
 
-        public AirCCWsClient(AirCCConfigOptions airCcConfigOptions, IAirCCSettingsService airCcSettingsService)
+        public AirCcWsClient(AirCCConfigOptions airCcConfigOptions, IAirCCSettingsService airCcSettingsService)
         {
-            airCCConfigOptions = airCcConfigOptions;
+            this.airCcConfigOptions = airCcConfigOptions;
             this.airCcSettingsService = airCcSettingsService;
         }
 
         public void Initialize()
         {
             var token = GenerateToken();
-            var baseUrl = $"ws:{airCCConfigOptions.RegistryServiceUrl}?token={token}&appId={airCCConfigOptions.ApplicationId}";
+            var baseUrl = $"ws://{airCcConfigOptions.RegistryServiceUrl}?token={token}&appId={airCcConfigOptions.ApplicationId}";
             WatsonWsClient client = new WatsonWsClient(new Uri(baseUrl));
             client.ServerConnected += ServerConnected;
             client.ServerDisconnected += ServerDisconnected;
@@ -60,10 +60,10 @@ namespace AirCC.Client.Modules
         private string GenerateToken()
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(airCCConfigOptions.ApplicationSecret);
+            var key = Encoding.ASCII.GetBytes(airCcConfigOptions.ApplicationSecret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = airCCConfigOptions.ApplicationId,
+                Issuer = airCcConfigOptions.ApplicationId,
                 Expires = DateTimeOffset.UtcNow.AddSeconds(300).UtcDateTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Audience = "AirCC"

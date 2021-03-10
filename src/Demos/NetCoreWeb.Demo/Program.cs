@@ -1,4 +1,4 @@
-using AirCCClient.Web;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AirCC.Client;
 
 namespace NetCoreWeb.Demo
 {
@@ -19,7 +20,7 @@ namespace NetCoreWeb.Demo
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAirCCFile()
+                .ConfigureAirCcFile()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -22,7 +22,7 @@ namespace AirCC.Client
             services.AddSingleton(airCcConfigOptions);
             services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.TryAddSingleton<IAirCCSettingsService, AirCCSettingsService>();
-            services.AddSingleton<AirCCWsClient>();
+            services.AddSingleton<AirCcWsClient>();
             services.AddHostedService<RegistrySyncModule>();
             if (!string.IsNullOrWhiteSpace(airCcConfigOptions.MainPath))
             {
