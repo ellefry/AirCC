@@ -17,38 +17,48 @@ namespace AirCC.Client.Modules
         private readonly AirCCConfigOptions airCcConfigOptions;
         private readonly IAirCCSettingsService airCcSettingsService;
 
+        private WatsonWsClient client = null;
+
         public AirCcWsClient(AirCCConfigOptions airCcConfigOptions, IAirCCSettingsService airCcSettingsService)
         {
             this.airCcConfigOptions = airCcConfigOptions;
             this.airCcSettingsService = airCcSettingsService;
+            Initialize();
         }
 
-        public void Initialize()
+        private void Initialize()
         {
             var token = GenerateToken();
-            var baseUrl = $"ws://{airCcConfigOptions.RegistryServiceUrl}?token={token}&appId={airCcConfigOptions.ApplicationId}";
-            WatsonWsClient client = new WatsonWsClient(new Uri(baseUrl));
+            var baseUrl = $"ws://{airCcConfigOptions.RegistryServiceUrl}?token={token}&appId={airCcConfigOptions.ApplicationId}"; client = new WatsonWsClient(new Uri(baseUrl));
             client.ServerConnected += ServerConnected;
             client.ServerDisconnected += ServerDisconnected;
             client.MessageReceived += MessageReceived;
-            client.Start();
         }
+
+        public async Task StartAsync() => await client.StartAsync();
+        public void Stop() => client.Stop();
+
+        public bool Connected => client.Connected;
 
         private void MessageReceived(object sender, MessageReceivedEventArgs args)
         {
-            using var ms = new MemoryStream(args.Data);
-            BinaryFormatter bf = new BinaryFormatter();
-            var settings = bf.Deserialize(ms) as AirCCSettingCollection;
-            foreach (var item in settings.AirCCSettings)
+            if (args.Data != null && args.Data.Length > 0)
             {
-                Console.WriteLine($"{item.Key} : {item.Value}");
-            }
+                using var ms = new MemoryStream(args.Data);
+                BinaryFormatter bf = new BinaryFormatter();
+                var settings = bf.Deserialize(ms) as AirCCSettingCollection;
+                foreach (var item in settings.AirCCSettings)
+                {
+                    Console.WriteLine($"{item.Key} : {item.Value}");
+                }
 
-            airCcSettingsService.Update(settings.AirCCSettings).Wait();
+                airCcSettingsService.Update(settings.AirCCSettings).Wait();
+            }
         }
 
         private void ServerConnected(object sender, EventArgs args)
         {
+            
             Console.WriteLine("Server connected");
         }
 
@@ -69,7 +79,7 @@ namespace AirCC.Client.Modules
                 Audience = "AirCC"
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return token.ToString();
+            return tokenHandler.WriteToken(token);
         }
     }
 }

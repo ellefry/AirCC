@@ -18,6 +18,8 @@ namespace AirCC.Portal.Infrastructure
 {
     public class AirCCWsServer : WatsonWsServer
     {
+        public const string ListeningPort = "WsServerPort";
+
         private static readonly ConcurrentDictionary<string, string> aicCcClients =
             new ConcurrentDictionary<string, string>();
 
@@ -58,11 +60,11 @@ namespace AirCC.Portal.Infrastructure
                 token = _token;
             }
 
-            //var isValid = ValidateToken(token, appId);
-            //if (!isValid)
-            //{
-            //    this.DisconnectClient(args.IpPort);
-            //}
+            var isValid = ValidateToken(token, appId);
+            if (!isValid)
+            {
+                this.DisconnectClient(args.IpPort);
+            }
 
             UpdateClient(appId, args.IpPort);
         }

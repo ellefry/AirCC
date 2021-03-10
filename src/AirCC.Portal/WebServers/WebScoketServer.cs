@@ -12,7 +12,7 @@ using WatsonWebsocket;
 
 namespace AirCC.Portal.WebServers
 {
-    public class  WebScoketServer : BackgroundService
+    public class WebScoketServer : BackgroundService
     {
         private readonly ILogger<WebScoketServer> webSocketServer;
         private readonly AirCCWsServer server;

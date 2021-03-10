@@ -14,7 +14,8 @@ namespace AirCC.Portal.WebServers
     {
         public static void AddWebSocketServer(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(new AirCCWsServer("localhost", 4999,services.BuildServiceProvider()));
+            var port = configuration.GetValue<int>(AirCCWsServer.ListeningPort);
+            services.AddSingleton(new AirCCWsServer("127.0.0.1", port, services.BuildServiceProvider()));
             services.AddHostedService<WebScoketServer>();
         }
     }
