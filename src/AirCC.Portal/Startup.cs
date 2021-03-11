@@ -5,10 +5,8 @@ using AirCC.Portal.Infrastructure.WsServers;
 using AirCC.Portal.WebServers;
 using BCI.Extensions.AutoMapper;
 using BCI.Extensions.Core.DI;
-using BCI.Extensions.Core.Json;
 using BCI.Extensions.Core.ObjectMapping;
 using BCI.Extensions.EFCore;
-using BCI.Extensions.Newtonsoft;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace AirCC.Portal
 {
@@ -40,12 +40,12 @@ namespace AirCC.Portal
                 registerOption.RegisterUnitOfWork();
             });
             services.TryAddSingleton<IEntityMappingManager, EntityMappingManager>();
-            services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.TryAddSingleton<ISettingsSender, WsSocketSettingsSender>();
             services.AddMemoryCache();
             services.AddWebSocketServer(Configuration);
             services.AddControllers();
             services.AddMapper(typeof(AutoMapperProfile));
+            AddSwagger(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -60,10 +60,29 @@ namespace AirCC.Portal
             app.UseRouting();
 
             app.UseAuthorization();
+            UseSwagger(app);
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "AirCC", Version = "V1" });
+                options.CustomSchemaIds(x => x.FullName);
+            });
+        }
+
+        private void UseSwagger(IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AirCC API");
             });
         }
     }

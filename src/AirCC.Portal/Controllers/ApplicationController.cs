@@ -11,12 +11,10 @@ namespace AirCC.Portal.Controllers
     public class ApplicationController : ControllerBase
     {
         private readonly IApplicationAppService applicationAppService;
-        private readonly IApplicationConfigurationAppService configurationAppService;
 
-        public ApplicationController(IApplicationAppService applicationAppService, IApplicationConfigurationAppService configurationAppService)
+        public ApplicationController(IApplicationAppService applicationAppService)
         {
             this.applicationAppService = applicationAppService;
-            this.configurationAppService = configurationAppService;
         }
 
         [HttpPost("Create")]

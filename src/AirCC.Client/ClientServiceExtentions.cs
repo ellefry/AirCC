@@ -1,6 +1,4 @@
 ﻿using AirCC.Client.Modules;
-using BCI.Extensions.Core.Json;
-using BCI.Extensions.Newtonsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,7 +16,6 @@ namespace AirCC.Client
             if (airCcConfigOptions == null)
                 throw new ApplicationException($"No {AirCCConfigOptions.SectionName} configuration");
             services.AddSingleton(airCcConfigOptions);
-            services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.TryAddSingleton<IAirCCSettingsService, AirCCSettingsService>();
             services.AddSingleton<AirCcWsClient>();
             services.AddHostedService<RegistrySyncModule>();
