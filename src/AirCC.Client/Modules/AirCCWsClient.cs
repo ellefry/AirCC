@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using WatsonWebsocket;
 
 namespace AirCC.Client.Modules
@@ -12,13 +13,15 @@ namespace AirCC.Client.Modules
     {
         private readonly AirCCConfigOptions airCcConfigOptions;
         private readonly IAirCCSettingsService airCcSettingsService;
+        private readonly ILogger<AirCcWsClient> logger;
 
         private WatsonWsClient client = null;
 
-        public AirCcWsClient(AirCCConfigOptions airCcConfigOptions, IAirCCSettingsService airCcSettingsService)
+        public AirCcWsClient(AirCCConfigOptions airCcConfigOptions, IAirCCSettingsService airCcSettingsService, ILogger<AirCcWsClient> logger)
         {
             this.airCcConfigOptions = airCcConfigOptions;
             this.airCcSettingsService = airCcSettingsService;
+            this.logger = logger;
         }
 
         public void Start()
@@ -39,15 +42,22 @@ namespace AirCC.Client.Modules
         {
             if (args.Data != null && args.Data.Length > 0)
             {
-                using var ms = new MemoryStream(args.Data);
-                BinaryFormatter bf = new BinaryFormatter();
-                var settings = bf.Deserialize(ms) as AirCCSettingCollection;
-                foreach (var item in settings.AirCCSettings)
+                try
                 {
-                    Console.WriteLine($"{item.Key} : {item.Value}");
-                }
+                    using var ms = new MemoryStream(args.Data);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    var settings = bf.Deserialize(ms) as AirCCSettingCollection;
+                    foreach (var item in settings.AirCCSettings)
+                    {
+                        Console.WriteLine($"{item.Key} : {item.Value}");
+                    }
 
-                airCcSettingsService.Update(settings.AirCCSettings).Wait();
+                    airCcSettingsService.Update(settings.AirCCSettings).Wait();
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e.Message + Environment.NewLine + e.StackTrace);
+                }
             }
         }
 

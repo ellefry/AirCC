@@ -42,42 +42,37 @@ namespace AirCC.Portal.Infrastructure
             return null;
         }
 
-        private void ClientConnected(object sender, ClientConnectedEventArgs args)
+        private new void ClientConnected(object sender, ClientConnectedEventArgs args)
         {
-            Console.WriteLine("Client connected: " + args.IpPort);
+            logger.LogInformation("Client connected: " + args.IpPort);
             var nameValues = HttpUtility.ParseQueryString(args.HttpRequest.Url.Query);
-            string appId = string.Empty;
-            var token = string.Empty;
-            if (nameValues.TryGetValue("appId", out string _appId))
+            if (nameValues.TryGetValue("appId", out string appId) &&
+                nameValues.TryGetValue("token", out string token))
             {
-                appId = _appId;
+                var isValid = ValidateToken(appId, token);
+                if (!isValid)
+                {
+                    this.DisconnectClient(args.IpPort);
+                }
+                UpdateClient(appId, args.IpPort);
             }
-
-            if (nameValues.TryGetValue("token", out string _token))
-            {
-                token = _token;
-            }
-
-            var isValid = ValidateToken(token, appId);
-            if (!isValid)
+            else
             {
                 this.DisconnectClient(args.IpPort);
             }
-
-            UpdateClient(appId, args.IpPort);
         }
 
-        private void ClientDisconnected(object sender, ClientDisconnectedEventArgs args)
+        private new void ClientDisconnected(object sender, ClientDisconnectedEventArgs args)
         {
-            Console.WriteLine("Client disconnected: " + args.IpPort);
+            logger.LogInformation("Client disconnected: " + args.IpPort);
             var item = aicCcClients.FirstOrDefault(kv => kv.Value == args.IpPort);
             if (item.Key != null)
                 aicCcClients.TryRemove(item.Key, out _);
         }
 
-        private void MessageReceived(object sender, MessageReceivedEventArgs args)
+        private new void MessageReceived(object sender, MessageReceivedEventArgs args)
         {
-            Console.WriteLine("Message received from " + args.IpPort + ": " + Encoding.UTF8.GetString(args.Data));
+            logger.LogInformation("Message received from " + args.IpPort + ": " + Encoding.UTF8.GetString(args.Data));
         }
 
         private void UpdateClient(string appId, string ipPort)
@@ -96,7 +91,7 @@ namespace AirCC.Portal.Infrastructure
             }
         }
 
-        private bool ValidateToken(string token, string appId)
+        private bool ValidateToken(string appId, string token)
         {
             try
             {
@@ -119,7 +114,7 @@ namespace AirCC.Portal.Infrastructure
             }
             catch (Exception e)
             {
-                logger.LogError(e.Message + Environment.NewLine + e.StackTrace);
+                logger.LogError($"Validate token error : [{e.Message}]{Environment.NewLine}{e.StackTrace}");
                 return false;
             }
         }
