@@ -37,7 +37,7 @@ namespace AirCC.Client.Modules
                 {
                     logger.LogError(ex.Message + Environment.NewLine + ex.StackTrace);
                 }
-                await Task.Delay(10000, stoppingToken);//等待10秒
+                await Task.Delay(10000, stoppingToken);//等待10秒 
             }
 
         }
