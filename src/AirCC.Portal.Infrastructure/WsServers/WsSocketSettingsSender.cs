@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using AirCC.Client;
+﻿using AirCC.Client;
 using AirCC.Client.Registry;
 using AirCC.Portal.AppService.Clients;
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 
 namespace AirCC.Portal.Infrastructure.WsServers
 {
@@ -28,7 +26,7 @@ namespace AirCC.Portal.Infrastructure.WsServers
             var app = airCcWsServer.GetApplicationIpPort(appId);
             BinaryFormatter bf = new BinaryFormatter();
             await using var ms = new MemoryStream();
-            bf.Serialize(ms,settings);
+            bf.Serialize(ms, settings);
             await airCcWsServer.SendAsync(app, ms.ToArray());
         }
 

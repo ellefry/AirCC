@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace AirCC.Client
@@ -18,7 +16,7 @@ namespace AirCC.Client
                 if (!string.IsNullOrWhiteSpace(MainPath))
                     return Path.Combine(MainPath, FileName);
                 else
-                    return Path.Combine(Environment.CurrentDirectory,FileName);
+                    return Path.Combine(Environment.CurrentDirectory, FileName);
             }
         }
         public string MainPath { get; set; }

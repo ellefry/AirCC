@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BCI.Extensions.Core.Dependency;
+﻿using BCI.Extensions.Core.Dependency;
 using BCI.Extensions.Domain;
 using JetBrains.Annotations;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AirCC.Portal.Domain.DomainServices
 {

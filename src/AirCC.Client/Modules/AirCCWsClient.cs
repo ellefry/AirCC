@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using WatsonWebsocket;
 
 namespace AirCC.Client.Modules
@@ -57,7 +53,7 @@ namespace AirCC.Client.Modules
 
         private void ServerConnected(object sender, EventArgs args)
         {
-            
+
             Console.WriteLine("Server connected");
         }
 

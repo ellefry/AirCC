@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AirCC.Portal.Infrastructure;
-using Castle.Core.Logging;
+﻿using AirCC.Portal.Infrastructure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WatsonWebsocket;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AirCC.Portal.WebServers
 {

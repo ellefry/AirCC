@@ -1,8 +1,7 @@
-﻿using System;
+﻿using BCI.Extensions.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using BCI.Extensions.Entity;
 
 namespace AirCC.Portal.Domain
 {

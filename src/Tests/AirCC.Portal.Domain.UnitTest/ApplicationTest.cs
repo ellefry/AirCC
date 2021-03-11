@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace AirCC.Portal.Domain.UnitTest
 {
-    
+
     public class ApplicationTest
     {
         //https://github.com/julielerman/dotnetconfms2020

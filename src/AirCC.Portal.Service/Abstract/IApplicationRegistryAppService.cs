@@ -1,5 +1,4 @@
 ﻿using AirCC.Client.Registry;
-using System;
 
 namespace AirCC.Portal.Service
 {

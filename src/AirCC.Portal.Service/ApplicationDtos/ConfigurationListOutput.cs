@@ -1,8 +1,5 @@
 ﻿using AirCC.Portal.Domain;
 using BCI.Extensions.DDD.ApplicationService;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AirCC.Portal.AppService.ApplicationDtos
 {

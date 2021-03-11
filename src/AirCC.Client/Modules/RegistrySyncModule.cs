@@ -1,13 +1,6 @@
-﻿using AirCC.Client.Registry;
-using BCI.Extensions.Core.Json;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +12,7 @@ namespace AirCC.Client.Modules
         private readonly AirCCConfigOptions airCcConfigOptions;
         private readonly AirCcWsClient airCcWsClient;
 
-        public RegistrySyncModule(ILogger<RegistrySyncModule> logger, AirCCConfigOptions airCcConfigOptions, 
+        public RegistrySyncModule(ILogger<RegistrySyncModule> logger, AirCCConfigOptions airCcConfigOptions,
             AirCcWsClient airCcWsClient)
         {
             this.logger = logger;
@@ -46,7 +39,7 @@ namespace AirCC.Client.Modules
                 }
                 await Task.Delay(10000, stoppingToken);//等待10秒
             }
-            
+
         }
     }
 }

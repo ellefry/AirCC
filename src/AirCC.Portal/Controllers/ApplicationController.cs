@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AirCC.Portal.AppService.Abstract;
+﻿using AirCC.Portal.AppService.Abstract;
 using AirCC.Portal.AppService.ApplicationDtos;
 using BCI.Extensions.DDD.ApplicationService;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace AirCC.Portal.Controllers
 {

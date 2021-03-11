@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AirCC.Portal.AppService.ApplicationDtos
+﻿namespace AirCC.Portal.AppService.ApplicationDtos
 {
     public class CreateConfigurationInput
     {

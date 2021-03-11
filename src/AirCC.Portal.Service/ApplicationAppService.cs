@@ -2,24 +2,21 @@
 using AirCC.Client.Registry;
 using AirCC.Portal.AppService.Abstract;
 using AirCC.Portal.AppService.ApplicationDtos;
-using AirCC.Portal.Domain;
-using AirCC.Portal.Domain.DomainServices;
-using BCI.Extensions.DDD.ApplicationService;
-using BCI.Extensions.Domain;
-using JetBrains.Annotations;
-using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using System.Linq;
-using IApplicationService = AirCC.Portal.Domain.DomainServices.IApplicationService;
 using AirCC.Portal.AppService.Clients;
+using AirCC.Portal.Domain;
 using AirCC.Portal.EntityFramework;
 using AutoMapper;
 using BCI.Extensions.Core.ObjectMapping;
+using BCI.Extensions.DDD.ApplicationService;
+using BCI.Extensions.Domain;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Transactions;
+using IApplicationService = AirCC.Portal.Domain.DomainServices.IApplicationService;
 
 namespace AirCC.Portal.AppService
 {
@@ -118,15 +115,15 @@ namespace AirCC.Portal.AppService
         private async Task UpdateClientSettings(Application application)
         {
             var settings = application.GetConfigurations()
-                .Select(c => new AirCCSetting {Key = c.CfgKey, Value = c.CfgValue});
-            var airCCSettingCollection = new AirCCSettingCollection {AirCCSettings = settings.ToList()};
+                .Select(c => new AirCCSetting { Key = c.CfgKey, Value = c.CfgValue });
+            var airCCSettingCollection = new AirCCSettingCollection { AirCCSettings = settings.ToList() };
             await settingsSender.SendSettings(airCCSettingCollection, application.Name);
         }
 
         private async Task ExecuteTransaction(Func<Application, Task> action, Application application)
         {
             using var scope = new TransactionScope(scopeOption: TransactionScopeOption.Required,
-                transactionOptions: new TransactionOptions {IsolationLevel = IsolationLevel.RepeatableRead},
+                transactionOptions: new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead },
                 asyncFlowOption: TransactionScopeAsyncFlowOption.Enabled);
             await Repository.SaveChangesAsync();
             await action(application);
@@ -136,4 +133,4 @@ namespace AirCC.Portal.AppService
     }
 }
 
-    
+

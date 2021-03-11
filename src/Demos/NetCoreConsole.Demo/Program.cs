@@ -1,10 +1,7 @@
-﻿using System;
+﻿using AirCC.Client;
+using System;
 using System.IO;
-using System.Net.WebSockets;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading;
-using AirCC.Client;
 using WatsonWebsocket;
 
 namespace NetCoreConsole.Demo

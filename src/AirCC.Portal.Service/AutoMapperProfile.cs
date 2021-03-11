@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AirCC.Portal.AppService.ApplicationDtos;
+﻿using AirCC.Portal.AppService.ApplicationDtos;
 using AirCC.Portal.Domain;
+using AutoMapper;
 
 namespace AirCC.Portal.AppService
 {

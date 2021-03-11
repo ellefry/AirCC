@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using AirCC.Client;
-using Microsoft.Extensions.Configuration;
 
 namespace NetCoreWeb.Demo.Controllers
 {
@@ -19,9 +15,9 @@ namespace NetCoreWeb.Demo.Controllers
             this.configuration = configuration;
         }
 
-        public IEnumerable<KeyValuePair<string,string>> Get()
+        public IEnumerable<KeyValuePair<string, string>> Get()
         {
-            return configuration.AsEnumerable().Where(item=>item.Key.Contains("_key"));
+            return configuration.AsEnumerable().Where(item => item.Key.Contains("_key"));
         }
     }
 }

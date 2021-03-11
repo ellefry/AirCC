@@ -1,8 +1,8 @@
-﻿using System;
+﻿using BCI.Extensions.Entity;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using BCI.Extensions.Entity;
 
 namespace AirCC.Portal.Domain
 {
@@ -13,7 +13,7 @@ namespace AirCC.Portal.Domain
         public bool Active { get; set; } = true;
 
         public virtual ICollection<ApplicationConfiguration> Configurations { get; private set; }
-        
+
         public void AddConfiguration([NotNull] ApplicationConfiguration cfg)
         {
             if (Configurations == null)

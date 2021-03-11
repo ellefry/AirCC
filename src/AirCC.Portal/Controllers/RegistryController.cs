@@ -1,11 +1,7 @@
 ﻿using AirCC.Client.Registry;
 using AirCC.Portal.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AirCC.Portal.Controllers

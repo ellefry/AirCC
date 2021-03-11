@@ -1,12 +1,9 @@
 ﻿using AirCC.Portal.AppService.ApplicationDtos;
+using AirCC.Portal.Domain;
 using BCI.Extensions.Core.Dependency;
 using BCI.Extensions.DDD.ApplicationService;
 using JetBrains.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using AirCC.Portal.Domain;
 
 namespace AirCC.Portal.AppService.Abstract
 {

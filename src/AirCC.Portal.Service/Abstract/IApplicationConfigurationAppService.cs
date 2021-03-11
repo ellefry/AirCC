@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using AirCC.Portal.Domain;
+﻿using AirCC.Portal.Domain;
 using BCI.Extensions.Core.Dependency;
 using BCI.Extensions.DDD.ApplicationService;
+using System.Threading.Tasks;
 
 namespace AirCC.Portal.AppService.Abstract
 {

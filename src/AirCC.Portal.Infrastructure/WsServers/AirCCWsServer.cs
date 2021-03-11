@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using AirCC.Portal.Domain;
+﻿using AirCC.Portal.Domain;
 using BCI.Extensions.Core.Extensions;
 using BCI.Extensions.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Concurrent;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Text;
+using System.Web;
 using WatsonWebsocket;
 
 namespace AirCC.Portal.Infrastructure
