@@ -1,11 +1,5 @@
-﻿using AirCC.Client;
-using AirCC.Client.Modules;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AirCC.Client
 {
@@ -13,7 +7,8 @@ namespace AirCC.Client
     {
         public static IHostBuilder ConfigureAirCcFile(this IHostBuilder hostBuilder)
         {
-            hostBuilder.ConfigureServices(services => {
+            hostBuilder.ConfigureServices(services =>
+            {
                 services.AddClientServices();
             });
 

@@ -23,22 +23,21 @@ namespace AirCC.Client.Modules
         {
             this.airCcConfigOptions = airCcConfigOptions;
             this.airCcSettingsService = airCcSettingsService;
-            Initialize();
         }
 
-        private void Initialize()
+        public void Start()
         {
             var token = GenerateToken();
             var baseUrl = $"ws://{airCcConfigOptions.RegistryServiceUrl}?token={token}&appId={airCcConfigOptions.ApplicationId}"; client = new WatsonWsClient(new Uri(baseUrl));
             client.ServerConnected += ServerConnected;
             client.ServerDisconnected += ServerDisconnected;
             client.MessageReceived += MessageReceived;
+            client.Start();
         }
 
-        public async Task StartAsync() => await client.StartAsync();
         public void Stop() => client.Stop();
 
-        public bool Connected => client.Connected;
+        public bool Connected => client?.Connected ?? false;
 
         private void MessageReceived(object sender, MessageReceivedEventArgs args)
         {

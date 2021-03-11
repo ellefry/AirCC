@@ -29,15 +29,15 @@ namespace AirCC.Client.Modules
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await airCcWsClient.StartAsync();
+            //airCcWsClient.Start();
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
                     if (!airCcWsClient.Connected)
                     {
-                        airCcWsClient.Stop();
-                        await airCcWsClient.StartAsync();
+                        //airCcWsClient.Stop();
+                        airCcWsClient.Start();
                     }
                 }
                 catch (Exception ex)
