@@ -43,7 +43,7 @@ namespace AirCC.Portal
             services.TryAddSingleton<ISettingsSender, WsSocketSettingsSender>();
             services.AddMemoryCache();
             services.AddWebSocketServer(Configuration);
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddMapper(typeof(AutoMapperProfile));
             AddSwagger(services);
             //services.AddServerSideBlazor();

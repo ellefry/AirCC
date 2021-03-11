@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.Portal.Infrastructure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreConsole.Demo", "Demos\NetCoreConsole.Demo\NetCoreConsole.Demo.csproj", "{96E5C40F-F853-4DBB-A747-092EBFE91931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirCC.PortalUI", "AirCC.PortalUI\AirCC.PortalUI.csproj", "{8498873A-35CC-4AB2-ADF8-CB8D55C1DBEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirCC.PortalUI", "AirCC.PortalUI\AirCC.PortalUI.csproj", "{8498873A-35CC-4AB2-ADF8-CB8D55C1DBEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

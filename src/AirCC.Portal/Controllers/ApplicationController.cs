@@ -2,6 +2,7 @@
 using AirCC.Portal.AppService.ApplicationDtos;
 using BCI.Extensions.DDD.ApplicationService;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AirCC.Portal.Controllers
@@ -47,5 +48,16 @@ namespace AirCC.Portal.Controllers
         {
             return await applicationAppService.GetPagedConfigurations(appId, input);
         }
+
+        [HttpGet("list/{name}/{pageIndex}")]
+        public async Task<IEnumerable<ApplicationListOutput>> GetPagedApplications(string name, int pageIndex = 1)
+        {
+            //return await applicationAppService
+            //    .GetPagedListAsync<ApplicationListOutput, ApplicationListInput>
+            //    (new ApplicationListInput { CurrentIndex = pageIndex, Name = name });
+
+            return await applicationAppService.GetListAsync<ApplicationListOutput>();
+        }
+
     }
 }

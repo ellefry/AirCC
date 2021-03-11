@@ -1,0 +1,39 @@
+﻿@page "/application"
+@using BCI.Extensions.DDD.ApplicationService;
+@using AirCC.Portal.AppService.ApplicationDtos;
+@using AirCC.PortalUI
+@inject HttpClient Http
+
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Client Secret</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in result)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.ClientSecret</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<ApplicationListOutput> result;
+
+    protected override async Task OnInitializedAsync()
+    {
+        result = await Http.GetFromJsonAsync<IEnumerable<ApplicationListOutput>>("api/app/list/aircc/1");
+    }
+}
