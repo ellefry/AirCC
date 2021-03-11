@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="BCI.Extensions.AutoMapper" Version="0.2021.38.1123" />
     <PackageReference Include="BCI.Extensions.EFCore.SqlServer" Version="0.2021.38.1123" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.0" />
   </ItemGroup>
@@ -22,6 +23,7 @@
     <ProjectReference Include="..\AirCC.Portal.Data\AirCC.Portal.EntityFramework.csproj" />
     <ProjectReference Include="..\AirCC.Portal.Infrastructure\AirCC.Portal.Infrastructure.csproj" />
     <ProjectReference Include="..\AirCC.Portal.Service\AirCC.Portal.AppService.csproj" />
+    <ProjectReference Include="..\AirCC.PortalUI\AirCC.PortalUI.csproj" />
   </ItemGroup>
 
 

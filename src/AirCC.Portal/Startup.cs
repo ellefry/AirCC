@@ -46,6 +46,9 @@ namespace AirCC.Portal
             services.AddControllers();
             services.AddMapper(typeof(AutoMapperProfile));
             AddSwagger(services);
+            //services.AddServerSideBlazor();
+            //services.AddControllersWithViews();
+            //services.AddRazorPages();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,6 +60,9 @@ namespace AirCC.Portal
             
             app.UseHttpsRedirection();
 
+            app.UseBlazorFrameworkFiles();
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -64,7 +70,10 @@ namespace AirCC.Portal
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapRazorPages();
+                //endpoints.MapBlazorHub();
                 endpoints.MapControllers();
+                endpoints.MapFallbackToFile("index.html");
             });
         }
 
@@ -72,7 +81,7 @@ namespace AirCC.Portal
         {
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "AirCC", Version = "V1" });
+                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Air CC", Version = "V1" });
                 options.CustomSchemaIds(x => x.FullName);
             });
         }
@@ -82,7 +91,7 @@ namespace AirCC.Portal
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AirCC API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Air CC API");
             });
         }
     }
