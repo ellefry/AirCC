@@ -1,20 +1,26 @@
 using AirCC.Portal.AppService;
 using AirCC.Portal.AppService.Clients;
 using AirCC.Portal.EntityFramework;
+using AirCC.Portal.Exceptions;
 using AirCC.Portal.Infrastructure.WsServers;
 using AirCC.Portal.WebServers;
 using BCI.Extensions.AutoMapper;
 using BCI.Extensions.Core.DI;
 using BCI.Extensions.Core.ObjectMapping;
 using BCI.Extensions.EFCore;
+using BCI.Extensions.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace AirCC.Portal
@@ -43,7 +49,21 @@ namespace AirCC.Portal
             services.TryAddSingleton<ISettingsSender, WsSocketSettingsSender>();
             services.AddMemoryCache();
             services.AddWebSocketServer(Configuration);
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<HttpExceptionFilter>();
+            }).AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Local;
+                opt.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                opt.SerializerSettings.Converters.Add(new StringEnumConverter { AllowIntegerValues = false, NamingStrategy = null });
+                var resover = opt.SerializerSettings.ContractResolver;
+                if (resover != null)
+                {
+                    var res = resover as DefaultContractResolver;
+                    res.NamingStrategy = null;
+                }
+            });
             services.AddMapper(typeof(AutoMapperProfile));
             AddSwagger(services);
             //services.AddServerSideBlazor();

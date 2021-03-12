@@ -1,10 +1,11 @@
 ﻿@page "/application"
+@using System.Text.Json
 @using BCI.Extensions.DDD.ApplicationService;
 @using AirCC.Portal.AppService.ApplicationDtos;
 @using AirCC.PortalUI
 @inject HttpClient Http
 
-@if (result == null)
+@if (result?.DataList == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -18,7 +19,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in result)
+            @foreach (var item in result.DataList)
             {
                 <tr>
                     <td>@item.Name</td>
@@ -30,10 +31,17 @@ else
 }
 
 @code {
-    private IEnumerable<ApplicationListOutput> result;
+    private PagedResultDto<ApplicationListOutput> result;
 
     protected override async Task OnInitializedAsync()
     {
-        result = await Http.GetFromJsonAsync<IEnumerable<ApplicationListOutput>>("api/app/list/aircc/1");
+        try
+        {
+            result = await Http.GetFromJsonAsync<PagedResultDto<ApplicationListOutput>>("api/app/pagedList/aircc/1");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }
