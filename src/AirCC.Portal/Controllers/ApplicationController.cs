@@ -57,41 +57,6 @@ namespace AirCC.Portal.Controllers
         [HttpGet("list/{name}/{pageIndex}")]
         public async Task<IEnumerable<ApplicationListOutput>> GetApplications(string name, int pageIndex = 1)
         {
-            //return await applicationAppService
-            //    .GetPagedListAsync<ApplicationListOutput, ApplicationListInput>
-            //    (new ApplicationListInput { CurrentIndex = pageIndex, Name = name });
-
-            try
-            {
-                var s = @"{
-  'DataList': [
-    {
-                    'Id': '1',
-      'Name': 'AirCC',
-      'ClientSecret': 'AirCC_Secret'
-    }
-  ],
-  'PageSize': 10,
-  'TotalPages': 1,
-  'TotalCount': 1,
-  'CurrentIndex': 1
-}";
-
-                var t = jsonSerializer.Deserialize<PagedResultDto<ApplicationListOutput>>(s);
-
-                var original = await new HttpClient().GetAsync("http://localhost:5000/sample-data/json.json").Result.Content.ReadAsStringAsync();
-                var ret = jsonSerializer.Deserialize<PagedResultDto<ApplicationListOutput>>(original);
-
-                var result = await new HttpClient()
-                    .GetFromJsonAsync<PagedResultDto<ApplicationListOutput>>("http://localhost:5000/sample-data/json.json");
-            }
-            catch (System.Exception e)
-            {
-
-                throw;
-            }
-          
-
             return await applicationAppService.GetListAsync<ApplicationListOutput>();
         }
 

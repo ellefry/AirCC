@@ -38,6 +38,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        //https://github.com/rickardn/HttpClientJsonExtensions
+
         var original = await Http.GetAsync("api/app/pagedList/aircc/1");
         result = json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
 
