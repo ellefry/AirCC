@@ -1,8 +1,11 @@
 ﻿using AirCC.Portal.AppService.Abstract;
 using AirCC.Portal.AppService.ApplicationDtos;
+using BCI.Extensions.Core.Json;
 using BCI.Extensions.DDD.ApplicationService;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace AirCC.Portal.Controllers
@@ -12,10 +15,12 @@ namespace AirCC.Portal.Controllers
     public class ApplicationController : ControllerBase
     {
         private readonly IApplicationAppService applicationAppService;
+        private readonly IJsonSerializer jsonSerializer;
 
-        public ApplicationController(IApplicationAppService applicationAppService)
+        public ApplicationController(IApplicationAppService applicationAppService, IJsonSerializer jsonSerializer)
         {
             this.applicationAppService = applicationAppService;
+            this.jsonSerializer = jsonSerializer;
         }
 
         [HttpPost("Create")]
@@ -56,6 +61,37 @@ namespace AirCC.Portal.Controllers
             //    .GetPagedListAsync<ApplicationListOutput, ApplicationListInput>
             //    (new ApplicationListInput { CurrentIndex = pageIndex, Name = name });
 
+            try
+            {
+                var s = @"{
+  'DataList': [
+    {
+                    'Id': '1',
+      'Name': 'AirCC',
+      'ClientSecret': 'AirCC_Secret'
+    }
+  ],
+  'PageSize': 10,
+  'TotalPages': 1,
+  'TotalCount': 1,
+  'CurrentIndex': 1
+}";
+
+                var t = jsonSerializer.Deserialize<PagedResultDto<ApplicationListOutput>>(s);
+
+                var original = await new HttpClient().GetAsync("http://localhost:5000/sample-data/json.json").Result.Content.ReadAsStringAsync();
+                var ret = jsonSerializer.Deserialize<PagedResultDto<ApplicationListOutput>>(original);
+
+                var result = await new HttpClient()
+                    .GetFromJsonAsync<PagedResultDto<ApplicationListOutput>>("http://localhost:5000/sample-data/json.json");
+            }
+            catch (System.Exception e)
+            {
+
+                throw;
+            }
+          
+
             return await applicationAppService.GetListAsync<ApplicationListOutput>();
         }
 
@@ -65,6 +101,7 @@ namespace AirCC.Portal.Controllers
             var result =  await applicationAppService
                 .GetPagedListAsync<ApplicationListOutput, ApplicationListInput>
                 (new ApplicationListInput { CurrentIndex = pageIndex, Name = name });
+
             return result;
         }
 

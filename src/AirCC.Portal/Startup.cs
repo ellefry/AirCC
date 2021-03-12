@@ -6,9 +6,11 @@ using AirCC.Portal.Infrastructure.WsServers;
 using AirCC.Portal.WebServers;
 using BCI.Extensions.AutoMapper;
 using BCI.Extensions.Core.DI;
+using BCI.Extensions.Core.Json;
 using BCI.Extensions.Core.ObjectMapping;
 using BCI.Extensions.EFCore;
 using BCI.Extensions.Mvc;
+using BCI.Extensions.Newtonsoft;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
@@ -47,6 +49,7 @@ namespace AirCC.Portal
             });
             services.TryAddSingleton<IEntityMappingManager, EntityMappingManager>();
             services.TryAddSingleton<ISettingsSender, WsSocketSettingsSender>();
+            services.TryAddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             services.AddMemoryCache();
             services.AddWebSocketServer(Configuration);
             services.AddControllers(options =>

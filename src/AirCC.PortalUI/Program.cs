@@ -11,6 +11,8 @@ using AirCC.Portal.Exceptions;
 using Serilog;
 using Serilog.Core;
 using Serilog.Exceptions;
+using BCI.Extensions.Core.Json;
+using BCI.Extensions.Newtonsoft;
 
 namespace AirCC.PortalUI
 {
@@ -18,18 +20,19 @@ namespace AirCC.PortalUI
     {
         public static async Task Main(string[] args)
         {
-            SetupLogger();
-            Log.Information("Hello, browser!");
+            //SetupLogger();
+            //Log.Information("Hello, browser!");
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            var unhandledExceptionSender = new UnhandledExceptionSender();
-            var unhandledExceptionProvider = new UnhandledExceptionProvider(unhandledExceptionSender);
-            builder.Logging.AddProvider(unhandledExceptionProvider);
-            builder.Services.AddSingleton<IUnhandledExceptionSender>(unhandledExceptionSender);
 
+            //var unhandledExceptionSender = new UnhandledExceptionSender();
+            //var unhandledExceptionProvider = new UnhandledExceptionProvider(unhandledExceptionSender);
+            //builder.Logging.AddProvider(unhandledExceptionProvider);
+            //builder.Services.AddSingleton<IUnhandledExceptionSender>(unhandledExceptionSender);
+            builder.Services.AddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             await builder.Build().RunAsync();
         }
 
