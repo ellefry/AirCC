@@ -22,6 +22,7 @@ namespace AirCC.PortalUI
         {
             //SetupLogger();
             //Log.Information("Hello, browser!");
+            //https://blazorise.com/docs/usage/material/
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
