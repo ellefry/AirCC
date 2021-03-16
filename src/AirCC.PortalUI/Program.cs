@@ -13,6 +13,9 @@ using Serilog.Core;
 using Serilog.Exceptions;
 using BCI.Extensions.Core.Json;
 using BCI.Extensions.Newtonsoft;
+using Blazorise;
+using Blazorise.Icons.Material;
+using Blazorise.Material;
 
 namespace AirCC.PortalUI
 {
@@ -26,6 +29,16 @@ namespace AirCC.PortalUI
             //https://blazorise.com/docs/components
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+            //blazor material
+            builder.Services
+                .AddBlazorise(options =>
+                {
+                    options.ChangeTextOnKeyPress = true;
+                })
+                .AddMaterialProviders()
+                .AddMaterialIcons();
+
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
@@ -34,6 +47,7 @@ namespace AirCC.PortalUI
             //var unhandledExceptionProvider = new UnhandledExceptionProvider(unhandledExceptionSender);
             //builder.Logging.AddProvider(unhandledExceptionProvider);
             //builder.Services.AddSingleton<IUnhandledExceptionSender>(unhandledExceptionSender);
+
             builder.Services.AddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
             await builder.Build().RunAsync();
         }
