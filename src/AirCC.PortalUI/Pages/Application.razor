@@ -5,43 +5,75 @@
 @inject HttpClient Http
 @inject IJsonSerializer json
 
-<Row>
+
     @if (result?.DataList == null)
     {
         <p><em>Loading applications...</em></p>
     }
     else
     {
-        <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnWidescreen">
-            <Card Margin="Margin.Is4.FromBottom">
-                <CardHeader>
-                    <CardTitle>Applications</CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHeaderCell>Name</TableHeaderCell>
-                                <TableHeaderCell>ClientSecret</TableHeaderCell>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            @foreach (var item in result.DataList)
-                            {
+        <Row>
+            
+        
+            <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnWidescreen">
+                <Card Margin="Margin.Is4.FromBottom">
+                    <CardHeader>
+                        <CardTitle>Applications</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <Table>
+                            <TableHeader>
                                 <TableRow>
-                                    <TableRowCell>@item.Name</TableRowCell>
-                                    <TableRowCell>@item.ClientSecret</TableRowCell>
+                                    <TableHeaderCell>Name</TableHeaderCell>
+                                    <TableHeaderCell>ClientSecret</TableHeaderCell>
                                 </TableRow>
-                            }
+                            </TableHeader>
+                            <TableBody>
+                                @foreach (var item in result.DataList)
+                                {
+                                    <TableRow>
+                                        <TableRowCell>@item.Name</TableRowCell>
+                                        <TableRowCell>@item.ClientSecret</TableRowCell>
+                                    </TableRow>
+                                }
 
-                        </TableBody>
-                    </Table>
-                </CardBody>
-            </Card>
-        </Column>
+                            </TableBody>
+                        </Table>
+                    </CardBody>
+                </Card>
+                <Pagination>
+                    <PaginationItem>
+                        <PaginationLink>
+                            <span aria-hidden="true">«</span>
+                        </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink>
+                            1
+                        </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink>
+                            2
+                        </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink>
+                            3
+                        </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink>
+                            <span aria-hidden="true">»</span>
+                        </PaginationLink>
+                    </PaginationItem>
+                </Pagination>
+            </Column>
+        </Row>
+
     }
     
-</Row>
+
 
     @code {
         private PagedResultDto<ApplicationListOutput> result;
