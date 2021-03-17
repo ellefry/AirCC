@@ -1,29 +1,15 @@
-﻿@inherits LayoutComponentBase
-@*<div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <div class="main">
-        <div class="top-row px-4">
-            <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-        </div>
-
-        <div class="content px-4">
-            @Body
-        </div>
-    </div>*@
-
-
+﻿@layout RootLayout
+@inherits LayoutComponentBase
 <Layout Sider="true">
     <LayoutSider>
         <LayoutSiderContent>
             <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
                  Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
-                <BarToggler  />
+                <BarTogglerB />
                 <BarBrand>
                     <BarItem>
                         <BarLink To="/">
-                            <BarIcon IconName="IconName.Dashboard"  />
+                            <BarIcon IconName="IconName.Dashboard" />
                             Air CC
                         </BarLink>
                     </BarItem>
@@ -61,7 +47,7 @@
     </LayoutSider>
     <Layout>
         <LayoutHeader Fixed="true">
-            <Bar @bind-Visible="@topbarVisible" Breakpoint="Breakpoint.Desktop" Background="Background.None" ThemeContrast="ThemeContrast.Light">
+            <Bar @bind-Visible="@topbarVisible" Breakpoint="Breakpoint.Desktop" Background="Background.Dark" ThemeContrast="ThemeContrast.Dark">
                 <BarBrand>
                     <BarItem>
                         <BarLink To="">

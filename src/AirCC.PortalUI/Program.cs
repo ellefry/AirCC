@@ -14,8 +14,8 @@ using Serilog.Exceptions;
 using BCI.Extensions.Core.Json;
 using BCI.Extensions.Newtonsoft;
 using Blazorise;
-using Blazorise.Icons.Material;
-using Blazorise.Material;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 
 namespace AirCC.PortalUI
 {
@@ -36,8 +36,8 @@ namespace AirCC.PortalUI
                 {
                     options.ChangeTextOnKeyPress = true;
                 })
-                .AddMaterialProviders()
-                .AddMaterialIcons();
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
 
             builder.RootComponents.Add<App>("app");
 
