@@ -1,46 +1,54 @@
 ﻿@page "/application"
-@using System.Text.Json
 @using BCI.Extensions.DDD.ApplicationService;
 @using BCI.Extensions.Core.Json;
 @using AirCC.Portal.AppService.ApplicationDtos;
-@using AirCC.PortalUI
 @inject HttpClient Http
 @inject IJsonSerializer json
 
-@if (result?.DataList == null)
-{
-    <p><em>Loading app...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Client Secret</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in result.DataList)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.ClientSecret</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@code {
-    private PagedResultDto<ApplicationListOutput> result;
-
-    protected override async Task OnInitializedAsync()
+<Row>
+    @if (result?.DataList == null)
     {
-        //https://github.com/rickardn/HttpClientJsonExtensions
-
-        var original = await Http.GetAsync("api/app/pagedList/aircc/1");
-        result = json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
-
+        <p><em>Loading applications...</em></p>
     }
-}
+    else
+    {
+        <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnWidescreen">
+            <Card Margin="Margin.Is4.FromBottom">
+                <CardHeader>
+                    <CardTitle>Applications</CardTitle>
+                </CardHeader>
+                <CardBody>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHeaderCell>Name</TableHeaderCell>
+                                <TableHeaderCell>ClientSecret</TableHeaderCell>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            @foreach (var item in result.DataList)
+                            {
+                                <TableRow>
+                                    <TableRowCell>@item.Name</TableRowCell>
+                                    <TableRowCell>@item.ClientSecret</TableRowCell>
+                                </TableRow>
+                            }
+
+                        </TableBody>
+                    </Table>
+                </CardBody>
+            </Card>
+        </Column>
+    }
+    
+</Row>
+
+    @code {
+        private PagedResultDto<ApplicationListOutput> result;
+
+        protected override async Task OnInitializedAsync()
+        {
+            var original = await Http.GetAsync("api/app/pagedList/aircc/1");
+            result = json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
+        }
+    }
