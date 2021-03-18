@@ -1,0 +1,96 @@
+﻿<span>@StartEndIndex.startIndex</span>
+<span>@StartEndIndex.endIndex</span>
+
+<Pagination>
+    <PaginationItem Disabled="@(1 == PageIndex)">
+        <PaginationLink Page="first">
+            <span aria-hidden="true">First</span>
+        </PaginationLink>
+    </PaginationItem>
+    <PaginationItem Disabled="@(1 == PageIndex)">
+        <PaginationLink Page="prev">
+            <span aria-hidden="true">«</span>
+        </PaginationLink>
+    </PaginationItem>
+    @for (int index = StartEndIndex.startIndex; index < StartEndIndex.endIndex; index++)
+    {
+        var indexUsed = index;
+        <PaginationItem  Active="@(indexUsed == PageIndex)">
+            <PaginationLink Page="@indexUsed.ToString()" Clicked="@OnPaginationItemClick">
+                @indexUsed
+            </PaginationLink>
+        </PaginationItem>
+    }
+    <PaginationItem Disabled="@(TotalPages == PageIndex)">
+        <PaginationLink Page="next">
+            <span aria-hidden="true">»</span>
+        </PaginationLink>
+    </PaginationItem>
+    <PaginationItem Disabled="@(TotalPages == PageIndex)">
+        <PaginationLink Page="last">
+            <span aria-hidden="true">Last</span>
+        </PaginationLink>
+    </PaginationItem>
+</Pagination>
+
+@code {
+    [Parameter]
+    public int PageIndex { get; set; }
+
+    [Parameter]
+    public int PageSize { get; set; } = 10;
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageItemClickEventCallback { get; set; }
+
+    [Parameter]
+    public Func<string, Task> OnPaginationItemClick { get; set; }
+
+    private const int DisplayedPageCount = 10;
+
+    private (int startIndex, int endIndex) StartEndIndex
+    {
+        get
+        {
+            var criterion = DisplayedPageCount / 2;
+            if (TotalPages <= DisplayedPageCount)
+                return (1, TotalPages);
+            int start = 1;
+            int end = 1;
+            if (PageIndex < (criterion + 1))
+            {
+                start = 1;
+                end = 10;
+            }
+            else
+            {
+                start = PageIndex - criterion + 1;
+                end = PageIndex + criterion;
+            }
+
+            if (end >= TotalPages)
+                end = TotalPages;
+
+            return (start, end);
+        }
+    }
+
+    //private void PageItemClick()
+    //{
+
+    //}
+
+    //private int clickedPageIndex = 1;
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    clickedPageIndex = PageIndex;
+    //}
+
+}
+
