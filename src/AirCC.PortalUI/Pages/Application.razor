@@ -29,7 +29,7 @@ else
     </Row>
     <br/>
     <TableTemplate TableTitle="Applications" Items="result.DataList" TItem="ApplicationListOutput"
-                   TotalCount=350 TotalPages=35 PageSize=" 10"
+                   TotalCount=result.TotalCount TotalPages=result.TotalPages PageSize=" 10"
                    PageIndex=@result.CurrentIndex OnPaginationItemClick="@OnPageItemClicked">
         <TableHeaderContent>
             <TableHeaderCell>Name</TableHeaderCell>

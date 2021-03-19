@@ -5,7 +5,6 @@ using AirCC.Portal.AppService.ApplicationDtos;
 using AirCC.Portal.AppService.Clients;
 using AirCC.Portal.Domain;
 using AirCC.Portal.EntityFramework;
-using AutoMapper;
 using BCI.Extensions.Core.ObjectMapping;
 using BCI.Extensions.DDD.ApplicationService;
 using BCI.Extensions.Domain;
@@ -23,22 +22,14 @@ namespace AirCC.Portal.AppService
     public class ApplicationAppService : ApplicationServiceBase<Application, string>, IApplicationAppService
     {
         private readonly IApplicationService applicationService;
-        private readonly IMemoryCache memoryCache;
         private readonly ISettingsSender settingsSender;
-        private readonly AirCCDbContext dbContext;
-        private readonly IRepository<ApplicationConfiguration> configurationRepository;
 
         public ApplicationAppService(IRepository<Application, string> repository, IServiceProvider serviceProvider,
-            IApplicationService applicationService,
-            IMemoryCache memoryCache, ISettingsSender settingsSender, AirCCDbContext dbContext, IEntityMappingManager m,
-            IMapper mapper, IRepository<ApplicationConfiguration> configurationRepository)
+            IApplicationService applicationService,ISettingsSender settingsSender)
             : base(repository, serviceProvider)
         {
             this.applicationService = applicationService;
-            this.memoryCache = memoryCache;
             this.settingsSender = settingsSender;
-            this.dbContext = dbContext;
-            this.configurationRepository = configurationRepository;
         }
 
         public override async Task CreateAsync<TCreateInput>(TCreateInput input)
@@ -55,6 +46,16 @@ namespace AirCC.Portal.AppService
             MapToEntity(applicationInput, application);
             await applicationService.Update(application);
             await Repository.SaveChangesAsync();
+        }
+
+        protected override IQueryable<Application> CreateFilteredQuery<TGetListInput>(TGetListInput input)
+        {
+            var inputParams = input as ApplicationListInput;
+            if (!string.IsNullOrEmpty(inputParams.Name))
+            {
+                return Repository.NoTrackingTable.Where(a => a.Name.Contains(inputParams.Name));
+            }
+            return base.CreateFilteredQuery(input);
         }
 
         public async Task AddConfiguration(string appId, [NotNull] CreateConfigurationInput input)
@@ -99,17 +100,6 @@ namespace AirCC.Portal.AppService
             var application = await Repository.FindAsync(appId);
             return await this.Mapping.Map<ConfigurationListOutput>(application.GetConfigurations().AsQueryable())
                 .ToPageAsync(input.CurrentIndex, input.PageSize, "Id");
-        }
-
-        private ApplicationRegistry GetRegisterApplication(string name)
-        {
-            if (memoryCache.TryGetValue(name, out ApplicationRegistry app))
-            {
-                return app;
-            }
-
-            //return new ApplicationRegistry { Id = "AirCC" };
-            throw new ApplicationException($"Can't find registry by application [{name}]");
         }
 
         private async Task UpdateClientSettings(Application application)
