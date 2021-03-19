@@ -1,0 +1,63 @@
+﻿@typeparam TItem
+
+<Row>
+    <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnWidescreen">
+        <Card Margin="Margin.Is4.FromBottom">
+            <CardHeader>
+                <CardTitle>@TableTitle</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            @TableHeaderContent
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        @foreach (var item in Items)
+                        {
+                            <TableRow>
+                                @RowTemplate(item)
+                            </TableRow>
+                        }
+                    </TableBody>
+                </Table>
+                <Paginator PageIndex=@PageIndex TotalCount=@TotalCount TotalPages=@TotalPages PageSize=@PageSize
+                           PageItemClickEventCallback="@PageItemClickEventCallback"></Paginator>
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
+@code {
+    [Parameter]
+    public string TableTitle { get; set; }
+
+    [Parameter]
+    public RenderFragment TableHeaderContent { get; set; }
+    [Parameter]
+    public RenderFragment<TItem> RowTemplate { get; set; }
+    [Parameter]
+    public IReadOnlyList<TItem> Items { get; set; }
+
+    [Parameter]
+    public int PageIndex { get; set; }
+
+    [Parameter]
+    public int PageSize { get; set; } = 10;
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int TotalCount { get; set; }
+
+    [Parameter]
+    public EventCallback<string> PageItemClickEventCallback { get; set; }
+
+    public virtual void PageItemClicked(string pageIndex)
+    {
+
+    }
+
+}

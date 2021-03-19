@@ -4,7 +4,7 @@
 @using AirCC.Portal.AppService.ApplicationDtos;
 @inject HttpClient Http
 @inject IJsonSerializer json
-
+@using AirCC.PortalUI.Shared.Table
 
 @if (result?.DataList == null)
 {
@@ -12,6 +12,20 @@
 }
 else
 {
+
+    <TableTemplate TableTitle="Applications" Items="result.DataList" Context="item" TotalCount=350 TotalPages=35 PageSize=" 10"
+                   PageIndex=@result.CurrentIndex PageItemClickEventCallback="@PageItemClicked">
+        <TableHeaderContent>
+            <TableHeaderCell>Name</TableHeaderCell>
+            <TableHeaderCell>ClientSecret</TableHeaderCell>
+        </TableHeaderContent>
+        <RowTemplate>
+            <TableRowCell>@item.Name</TableRowCell>
+            <TableRowCell>@item.ClientSecret</TableRowCell>
+        </RowTemplate>
+    </TableTemplate>
+
+
     <Row>
         <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnWidescreen">
             <Card Margin="Margin.Is4.FromBottom">
@@ -37,10 +51,10 @@ else
 
                         </TableBody>
                     </Table>
+                    <Paginator PageIndex=@result.CurrentIndex TotalCount=350 TotalPages=35 PageSize=" 10"
+                               PageItemClickEventCallback="@PageItemClicked"></Paginator>
                 </CardBody>
             </Card>
-            <Paginator PageIndex=@result.CurrentIndex TotalCount=350  TotalPages =35 PageSize =" 10"
-                       OnPaginationItemClick="@PageItemClicked"></Paginator>
         </Column>
     </Row>
 }
@@ -54,10 +68,13 @@ else
         result = json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
     }
 
-    public Task PageItemClicked(string pageIndex)
+    public void PageItemClicked(string pageIndex)
     {
         //https://docs.microsoft.com/en-us/aspnet/core/blazor/components/templated-components?view=aspnetcore-5.0
         result.CurrentIndex = int.Parse(pageIndex);
-        return Task.CompletedTask;
+        //return Task.CompletedTask;
     }
+
+
+
 }

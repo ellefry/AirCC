@@ -1,6 +1,4 @@
-﻿<span>@StartEndIndex.startIndex</span>
-<span>@StartEndIndex.endIndex</span>
-
+﻿
 <Pagination>
     <PaginationItem Disabled="@(1 == PageIndex)">
         <PaginationLink Page="first">
@@ -15,8 +13,8 @@
     @for (int index = StartEndIndex.startIndex; index < StartEndIndex.endIndex; index++)
     {
         var indexUsed = index;
-        <PaginationItem  Active="@(indexUsed == PageIndex)">
-            <PaginationLink Page="@indexUsed.ToString()" Clicked="@OnPaginationItemClick">
+        <PaginationItem Active="@(indexUsed == PageIndex)">
+            <PaginationLink Page="@indexUsed.ToString()" Clicked="@PageItemClickEventCallback">
                 @indexUsed
             </PaginationLink>
         </PaginationItem>
@@ -27,7 +25,7 @@
         </PaginationLink>
     </PaginationItem>
     <PaginationItem Disabled="@(TotalPages == PageIndex)">
-        <PaginationLink Page="last">
+        <PaginationLink Page="last" Clicked="@PageItemClickEventCallback">
             <span aria-hidden="true">Last</span>
         </PaginationLink>
     </PaginationItem>
@@ -47,7 +45,7 @@
     public int TotalCount { get; set; }
 
     [Parameter]
-    public EventCallback<int> PageItemClickEventCallback { get; set; }
+    public EventCallback<string> PageItemClickEventCallback { get; set; }
 
     [Parameter]
     public Func<string, Task> OnPaginationItemClick { get; set; }
@@ -66,7 +64,7 @@
             if (PageIndex < (criterion + 1))
             {
                 start = 1;
-                end = 10;
+                end = DisplayedPageCount;
             }
             else
             {
@@ -80,17 +78,5 @@
             return (start, end);
         }
     }
-
-    //private void PageItemClick()
-    //{
-
-    //}
-
-    //private int clickedPageIndex = 1;
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    clickedPageIndex = PageIndex;
-    //}
-
 }
 
