@@ -60,8 +60,8 @@ namespace AirCC.Portal.Controllers
             return await applicationAppService.GetListAsync<ApplicationListOutput>();
         }
 
-        [HttpGet("pagedList/{name}/{pageIndex}")]
-        public async Task<PagedResultDto<ApplicationListOutput>>GetPagedApplications(string name, int pageIndex = 1)
+        [HttpGet("pagedList")]
+        public async Task<PagedResultDto<ApplicationListOutput>>GetPagedApplications([FromQuery]string name, [FromQuery] int pageIndex = 1)
         {
             var result =  await applicationAppService
                 .GetPagedListAsync<ApplicationListOutput, ApplicationListInput>

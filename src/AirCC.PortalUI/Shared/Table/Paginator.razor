@@ -1,16 +1,16 @@
 ﻿
 <Pagination>
     <PaginationItem Disabled="@(1 == PageIndex)">
-        <PaginationLink Page="first">
+        <PaginationLink Page="first" Clicked="@PageItemClickEventCallback">
             <span aria-hidden="true">First</span>
         </PaginationLink>
     </PaginationItem>
     <PaginationItem Disabled="@(1 == PageIndex)">
-        <PaginationLink Page="prev">
+        <PaginationLink Page="prev" Clicked="@PageItemClickEventCallback">
             <span aria-hidden="true">«</span>
         </PaginationLink>
     </PaginationItem>
-    @for (int index = StartEndIndex.startIndex; index < StartEndIndex.endIndex; index++)
+    @for (int index = StartEndIndex.startIndex; index <= StartEndIndex.endIndex; index++)
     {
         var indexUsed = index;
         <PaginationItem Active="@(indexUsed == PageIndex)">
@@ -20,7 +20,7 @@
         </PaginationItem>
     }
     <PaginationItem Disabled="@(TotalPages == PageIndex)">
-        <PaginationLink Page="next">
+        <PaginationLink Page="next" Clicked="@PageItemClickEventCallback">
             <span aria-hidden="true">»</span>
         </PaginationLink>
     </PaginationItem>
@@ -46,9 +46,6 @@
 
     [Parameter]
     public EventCallback<string> PageItemClickEventCallback { get; set; }
-
-    [Parameter]
-    public Func<string, Task> OnPaginationItemClick { get; set; }
 
     private const int DisplayedPageCount = 10;
 

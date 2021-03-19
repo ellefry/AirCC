@@ -12,69 +12,60 @@
 }
 else
 {
-
-    <TableTemplate TableTitle="Applications" Items="result.DataList" Context="item" TotalCount=350 TotalPages=35 PageSize=" 10"
-                   PageIndex=@result.CurrentIndex PageItemClickEventCallback="@PageItemClicked">
+    <Row>
+        <Column ColumnSize="ColumnSize.Is12.OnMobile">
+            <Inline>
+                <Field>
+                    <FieldLabel>Name</FieldLabel>
+                </Field>
+                <Field Margin="Margin.Is3.OnX.OnTablet">
+                    <TextEdit Role="TextRole.Text" @bind-text="@Name" Placeholder="Application Name" />
+                </Field>
+                <Field>
+                    <Button Color="Color.Primary" @onclick=Search >Search</Button>
+                </Field>
+            </Inline>
+        </Column>
+    </Row>
+    <br/>
+    <TableTemplate TableTitle="Applications" Items="result.DataList" TItem="ApplicationListOutput"
+                   TotalCount=350 TotalPages=35 PageSize=" 10"
+                   PageIndex=@result.CurrentIndex OnPaginationItemClick="@OnPageItemClicked">
         <TableHeaderContent>
             <TableHeaderCell>Name</TableHeaderCell>
             <TableHeaderCell>ClientSecret</TableHeaderCell>
         </TableHeaderContent>
         <RowTemplate>
-            <TableRowCell>@item.Name</TableRowCell>
-            <TableRowCell>@item.ClientSecret</TableRowCell>
+            <TableRowCell>@context.Name</TableRowCell>
+            <TableRowCell>@context.ClientSecret</TableRowCell>
         </RowTemplate>
     </TableTemplate>
-
-
-    <Row>
-        <Column ColumnSize="ColumnSize.IsFull.OnDesktop.IsFull.OnWidescreen">
-            <Card Margin="Margin.Is4.FromBottom">
-                <CardHeader>
-                    <CardTitle>Applications</CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHeaderCell>Name</TableHeaderCell>
-                                <TableHeaderCell>ClientSecret</TableHeaderCell>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            @foreach (var item in result.DataList)
-                            {
-                                <TableRow>
-                                    <TableRowCell>@item.Name</TableRowCell>
-                                    <TableRowCell>@item.ClientSecret</TableRowCell>
-                                </TableRow>
-                            }
-
-                        </TableBody>
-                    </Table>
-                    <Paginator PageIndex=@result.CurrentIndex TotalCount=350 TotalPages=35 PageSize=" 10"
-                               PageItemClickEventCallback="@PageItemClicked"></Paginator>
-                </CardBody>
-            </Card>
-        </Column>
-    </Row>
 }
 
 @code {
     private PagedResultDto<ApplicationListOutput> result;
+    public string Name { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var original = await Http.GetAsync("api/app/pagedList/aircc/1");
-        result = json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
+        result = await Query();
     }
 
-    public void PageItemClicked(string pageIndex)
+    private async Task Search()
     {
-        //https://docs.microsoft.com/en-us/aspnet/core/blazor/components/templated-components?view=aspnetcore-5.0
-        result.CurrentIndex = int.Parse(pageIndex);
-        //return Task.CompletedTask;
+        result = await Query(Name);
+    }
+
+    private async Task OnPageItemClicked(int pageIndex)
+    {
+        result = await Query(Name, pageIndex);
     }
 
 
+    private async Task<PagedResultDto<ApplicationListOutput>> Query(string name = "", int pageIndex = 1)
+    {
+        var original = await Http.GetAsync($"api/app/pagedList?name={name}&pageIndex={pageIndex}");
+        return json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
+    }
 
 }

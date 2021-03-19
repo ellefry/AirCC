@@ -23,7 +23,7 @@
                     </TableBody>
                 </Table>
                 <Paginator PageIndex=@PageIndex TotalCount=@TotalCount TotalPages=@TotalPages PageSize=@PageSize
-                           PageItemClickEventCallback="@PageItemClickEventCallback"></Paginator>
+                           PageItemClickEventCallback="@PageItemClicked"></Paginator>
             </CardBody>
         </Card>
     </Column>
@@ -53,11 +53,29 @@
     public int TotalCount { get; set; }
 
     [Parameter]
-    public EventCallback<string> PageItemClickEventCallback { get; set; }
+    public EventCallback<int> OnPaginationItemClick { get; set; }
 
-    public virtual void PageItemClicked(string pageIndex)
+    private async Task PageItemClicked(string page)
     {
-
+        switch (page)
+        {
+            case "first":
+                PageIndex = 1;
+                break;
+            case "prev":
+                PageIndex = PageIndex - 1;
+                break;
+            case "next":
+                PageIndex = PageIndex + 1;
+                break;
+            case "last":
+                PageIndex = TotalPages;
+                break;
+            default:
+                PageIndex = int.Parse(page);
+                break;
+        }
+        await OnPaginationItemClick.InvokeAsync(PageIndex);
     }
 
 }
