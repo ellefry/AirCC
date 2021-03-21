@@ -1,0 +1,37 @@
+﻿@page "/apps/create"
+@using AirCC.Portal.AppService.ApplicationDtos;
+@using AirCC.PortalUI.Shared.Forms
+@using BCI.Extensions.Mvc.HttpClientJson
+@inject HttpClient Http
+
+<Row>
+    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+        <Card Margin="Margin.Is2.OnY">
+            <CardHeader>
+                <CardTitle>Create new application</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Validations Mode="ValidationMode.Auto" Model="@applicationInput" ValidateOnLoad="false">
+                    <ValidationText LabelText="Application Name" @bind-text="@applicationInput.Name"
+                                    ErrorText="Name filed is required!"></ValidationText>
+                    <ValidationText LabelText="Client Secret" @bind-text="@applicationInput.ClientSecret"
+                                    ErrorText="ClientSecret filed is required!"></ValidationText>
+                </Validations>
+                <Field Horizontal="true" JustifyContent="JustifyContent.End">
+                    <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
+                        <Button Color="Color.Primary" Clicked="@Submit">Submit</Button>
+                    </FieldBody>
+                </Field>
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
+@code{
+    private ApplicationInput applicationInput = new ApplicationInput();
+
+    private async Task Submit()
+    {
+        await Http.PostAsNewtonJsonAsync("api/app/create", applicationInput);
+    }
+}

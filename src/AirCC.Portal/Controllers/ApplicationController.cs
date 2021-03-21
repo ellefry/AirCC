@@ -24,7 +24,7 @@ namespace AirCC.Portal.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task Create(ApplicationInput input)
+        public async Task Create([FromBody]ApplicationInput input)
         {
             await applicationAppService.CreateAsync(input);
         }
