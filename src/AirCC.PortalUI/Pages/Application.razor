@@ -4,6 +4,7 @@
 @using AirCC.Portal.AppService.ApplicationDtos;
 @inject HttpClient Http
 @inject IJsonSerializer json
+@inject NavigationManager NavManager
 @using AirCC.PortalUI.Shared.Table
 
 @if (result?.DataList == null)
@@ -22,12 +23,12 @@ else
                     <TextEdit Role="TextRole.Text" @bind-text="@Name" Placeholder="Application Name" />
                 </Field>
                 <Field>
-                    <Button Color="Color.Primary" @onclick=Search >Search</Button>
+                    <Button Color="Color.Primary" @onclick=Search>Search</Button>
                 </Field>
             </Inline>
         </Column>
     </Row>
-    <br/>
+    <br />
     <TableTemplate TableTitle="Applications" Items="result.DataList" TItem="ApplicationListOutput"
                    TotalCount=result.TotalCount TotalPages=result.TotalPages PageSize=" 10"
                    PageIndex=@result.CurrentIndex OnPaginationItemClick="@OnPageItemClicked">

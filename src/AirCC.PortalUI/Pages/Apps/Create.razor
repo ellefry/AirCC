@@ -1,6 +1,6 @@
-﻿@page "/apps/create"
+﻿@page "/application/create"
+@page "/application/update/{Id}"
 @using AirCC.Portal.AppService.ApplicationDtos;
-@using AirCC.PortalUI.Shared.Forms
 @using BCI.Extensions.Mvc.HttpClientJson
 @inject HttpClient Http
 
@@ -8,30 +8,101 @@
     <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
         <Card Margin="Margin.Is2.OnY">
             <CardHeader>
-                <CardTitle>Create new application</CardTitle>
+                <CardTitle>@PageTitle</CardTitle>
             </CardHeader>
             <CardBody>
-                <Validations Mode="ValidationMode.Auto" Model="@applicationInput" ValidateOnLoad="false">
-                    <ValidationText LabelText="Application Name" @bind-text="@applicationInput.Name"
-                                    ErrorText="Name filed is required!"></ValidationText>
-                    <ValidationText LabelText="Client Secret" @bind-text="@applicationInput.ClientSecret"
-                                    ErrorText="ClientSecret filed is required!"></ValidationText>
+                <Validations @ref="validations" Mode="ValidationMode.Auto" Model="@applicationInput" ValidateOnLoad="false">
+
+                    <Field Visibility="Visibility.Never" style="display:none;">
+                        <TextEdit @bind-Text="@applicationInput.Id"></TextEdit>
+                    </Field>
+
+
+                    <Validation Validator="@ValidationRule.IsNotEmpty">
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is3.OnDesktop">Name</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is9.OnDesktop">
+                                <TextEdit Autofocus="true" Placeholder="" @bind-Text="@applicationInput.Name">
+                                    <Feedback>
+                                        <ValidationError>Name filed is required!</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation  UsePattern="true">
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is3.OnDesktop">Client Secret</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is9.OnDesktop">
+                                <TextEdit Pattern="[A-Za-z]{16}" Placeholder="" @bind-Text="@applicationInput.ClientSecret">
+                                    <Feedback>
+                                        <ValidationError>Pattern [A-Za-z]{16} does not match!!</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field Horizontal="true" JustifyContent="JustifyContent.End">
+                            <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
+                                <Check @bind-Checked="@applicationInput.Active">
+                                    <ChildContent>
+                                        Active
+                                    </ChildContent>
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </Check>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Field Horizontal="true" JustifyContent="JustifyContent.End">
+                        <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
+                            <Button Color="Color.Primary" Clicked="@Submit">Submit</Button>
+                        </FieldBody>
+                    </Field>
                 </Validations>
-                <Field Horizontal="true" JustifyContent="JustifyContent.End">
-                    <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
-                        <Button Color="Color.Primary" Clicked="@Submit">Submit</Button>
-                    </FieldBody>
-                </Field>
+               
             </CardBody>
         </Card>
     </Column>
 </Row>
 
 @code{
+    [Parameter]
+    public string Id { get; set; }
+
+    private Validations validations;
+
+    private bool update = false;
+    private string PageTitle { get; set; } = "Create a application";
+
     private ApplicationInput applicationInput = new ApplicationInput();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Id))
+        {
+            update = true;
+            PageTitle = "Update a application";
+            applicationInput = await Http.GetFromNewtonJsonAsync<ApplicationInput>($"api/app/{Id}");
+        }
+    }
 
     private async Task Submit()
     {
-        await Http.PostAsNewtonJsonAsync("api/app/create", applicationInput);
+        if (validations.ValidateAll())
+        {
+            if (update)
+            {
+                await Http.PostAsNewtonJsonAsync("api/app/update", applicationInput);
+            }
+            else
+            {
+                await Http.PostAsNewtonJsonAsync("api/app/create", applicationInput);
+            }
+        }
     }
 }

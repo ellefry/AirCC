@@ -24,9 +24,21 @@ namespace AirCC.Portal.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task Create([FromBody]ApplicationInput input)
+        public async Task Create(ApplicationInput input)
         {
             await applicationAppService.CreateAsync(input);
+        }
+
+        [HttpGet("{appId}")]
+        public async Task<ApplicationInput> GetApplication(string appId)
+        {
+            return await applicationAppService.GetAsync<ApplicationInput>(appId);
+        }
+
+        [HttpPost("Update")]
+        public async Task UpdateApplication(ApplicationInput input)
+        {
+            await applicationAppService.Update(input);
         }
 
         [HttpPost("{appId}/addConfiguration")]

@@ -13,6 +13,7 @@ namespace AirCC.Portal.AppService.Abstract
         Task UpdateConfigurationValue(string appId, [NotNull] CreateConfigurationInput input);
         Task OnlineConfiguration(string appId, string cfgId);
         Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input);
+        Task Update([NotNull] ApplicationInput applicationInput);
     }
 
     //    public interface IApplicationAppService : IScopedDependency
