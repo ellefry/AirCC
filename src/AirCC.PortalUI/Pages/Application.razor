@@ -23,7 +23,10 @@ else
                     <TextEdit Role="TextRole.Text" @bind-text="@Name" Placeholder="Application Name" />
                 </Field>
                 <Field>
-                    <Button Color="Color.Primary" @onclick=Search>Search</Button>
+                    <Button Color="Color.Primary" @onclick=@Search>Search</Button>
+                </Field>
+                <Field Margin="Margin.Is3.OnX.OnTablet" Float="Float.Right">
+                    <Button Color="Color.Primary" @onclick=@AddApplication>Add Application</Button>
                 </Field>
             </Inline>
         </Column>
@@ -35,10 +38,15 @@ else
         <TableHeaderContent>
             <TableHeaderCell>Name</TableHeaderCell>
             <TableHeaderCell>ClientSecret</TableHeaderCell>
+            <TableHeaderCell>Operations</TableHeaderCell>
         </TableHeaderContent>
         <RowTemplate>
             <TableRowCell>@context.Name</TableRowCell>
             <TableRowCell>@context.ClientSecret</TableRowCell>
+            <TableRowCell>
+                <Icon Name="IconName.Edit" title="Edit" @onclick="@(() => EditApplication(context.Id))" />
+                <Icon Name="IconName.Delete"  title="Delete"/>
+            </TableRowCell>
         </RowTemplate>
     </TableTemplate>
 }
@@ -50,6 +58,16 @@ else
     protected override async Task OnInitializedAsync()
     {
         result = await Query();
+    }
+
+    private void AddApplication()
+    {
+        NavManager.NavigateTo("/application/create");
+    }
+
+    private void EditApplication(string id)
+    {
+        NavManager.NavigateTo($"/application/update/{id}");
     }
 
     private async Task Search()
