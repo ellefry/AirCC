@@ -2,6 +2,7 @@
 @using BCI.Extensions.DDD.ApplicationService;
 @using BCI.Extensions.Core.Json;
 @using AirCC.Portal.AppService.ApplicationDtos;
+@using BCI.Extensions.Mvc.HttpClientJson
 @inject HttpClient Http
 @inject IJsonSerializer json
 @inject NavigationManager NavManager
@@ -26,7 +27,7 @@ else
                     <Button Color="Color.Primary" @onclick=@Search>Search</Button>
                 </Field>
                 <Field Margin="Margin.Is3.OnX.OnTablet" Float="Float.Right">
-                    <Button Color="Color.Primary" @onclick=@AddApplication>Add Application</Button>
+                    <Button Color="Color.Primary" @onclick="@(() => NavManager.NavigateTo("/application/create"))">Add Application</Button>
                 </Field>
             </Inline>
         </Column>
@@ -44,8 +45,10 @@ else
             <TableRowCell>@context.Name</TableRowCell>
             <TableRowCell>@context.ClientSecret</TableRowCell>
             <TableRowCell>
-                <Icon Name="IconName.Edit" title="Edit" @onclick="@(() => EditApplication(context.Id))" />
-                <Icon Name="IconName.Delete"  title="Delete"/>
+                <Icon Name="IconName.Edit" title="Edit"
+                      @onclick="@(() => NavManager.NavigateTo("/application/update/" + context.Id))" />
+                <Icon Name="IconName.Delete" title="Delete"
+                      @onclick="@(() => Delete(context.Id))" />
             </TableRowCell>
 
         </RowTemplate>
@@ -61,16 +64,6 @@ else
         result = await Query();
     }
 
-    private void AddApplication()
-    {
-        NavManager.NavigateTo("/application/create");
-    }
-
-    private void EditApplication(string id)
-    {
-        NavManager.NavigateTo($"/application/update/{id}");
-    }
-
     private async Task Search()
     {
         result = await Query(Name);
@@ -81,11 +74,19 @@ else
         result = await Query(Name, pageIndex);
     }
 
+    private async Task Delete(string id)
+    {
+        await Http.DeleteAsync($"api/app/{id}");
+        result = await Query();
+    }
 
     private async Task<PagedResultDto<ApplicationListOutput>> Query(string name = "", int pageIndex = 1)
     {
-        var original = await Http.GetAsync($"api/app/pagedList?name={name}&pageIndex={pageIndex}");
-        return json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
+        //var original = await Http.GetAsync($"api/app/pagedList?name={name}&pageIndex={pageIndex}");
+        //return json.Deserialize<PagedResultDto<ApplicationListOutput>>(await original.Content.ReadAsStringAsync());
+
+        return await Http.GetFromNewtonJsonAsync<PagedResultDto<ApplicationListOutput>>($"api/app/pagedList?name={name}&pageIndex={pageIndex}");
+
     }
 
 }

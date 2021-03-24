@@ -24,7 +24,7 @@ namespace AirCC.Portal.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task Create(ApplicationInput input)
+        public async Task CreateApplication(ApplicationInput input)
         {
             await applicationAppService.CreateAsync(input);
         }
@@ -39,6 +39,12 @@ namespace AirCC.Portal.Controllers
         public async Task UpdateApplication(ApplicationInput input)
         {
             await applicationAppService.Update(input);
+        }
+
+        [HttpDelete("{appId}")]
+        public async Task DeleteApplication(string appId)
+        {
+            await applicationAppService.DeleteAsync(appId);
         }
 
         [HttpPost("{appId}/addConfiguration")]
