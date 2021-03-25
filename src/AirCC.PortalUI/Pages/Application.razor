@@ -3,10 +3,13 @@
 @using BCI.Extensions.Core.Json;
 @using AirCC.Portal.AppService.ApplicationDtos;
 @using BCI.Extensions.Mvc.HttpClientJson
+@using AirCC.PortalUI.Shared.Table
+
 @inject HttpClient Http
 @inject IJsonSerializer json
 @inject NavigationManager NavManager
-@using AirCC.PortalUI.Shared.Table
+@inject IJSRuntime JsRuntime
+
 
 @if (result?.DataList == null)
 {
@@ -45,10 +48,15 @@ else
             <TableRowCell>@context.Name</TableRowCell>
             <TableRowCell>@context.ClientSecret</TableRowCell>
             <TableRowCell>
-                <Icon Name="IconName.Edit" title="Edit"
-                      @onclick="@(() => NavManager.NavigateTo("/application/update/" + context.Id))" />
-                <Icon Name="IconName.Delete" title="Delete"
-                      @onclick="@(() => Delete(context.Id))" />
+                <Button Color="Color.Success" Size="Size.ExtraSmall"
+                        @onclick="@(() => NavManager.NavigateTo("/application/update/" + context.Id))">
+                    Edit
+                    <Icon Name="IconName.Edit"></Icon>
+                </Button>
+                <Button Color="Color.Danger" Size="Size.ExtraSmall"
+                        @onclick="@(() => Delete(context.Id))">
+                    Delete<Icon Name="IconName.Delete"></Icon>
+                </Button>
             </TableRowCell>
 
         </RowTemplate>
@@ -76,8 +84,13 @@ else
 
     private async Task Delete(string id)
     {
-        await Http.DeleteAsync($"api/app/{id}");
-        result = await Query();
+        var confirmDelete = await JsRuntime.InvokeAsync<bool>("confirm", "Do you want to delete it?");
+        if (confirmDelete)
+        {
+            await Http.DeleteAsync($"api/app/{id}");
+            result = await Query();
+        }
+        //https://github.com/stsrki/Blazorise/issues/1166
     }
 
     private async Task<PagedResultDto<ApplicationListOutput>> Query(string name = "", int pageIndex = 1)
