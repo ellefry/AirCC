@@ -47,6 +47,12 @@ namespace AirCC.Portal.Controllers
             await applicationAppService.DeleteAsync(appId);
         }
 
+        [HttpGet("{appId}/Configuration/{cfgId}")]
+        public async Task<ConfigurationListOutput> GetConfiguration(string appId, string cfgId)
+        {
+            return await applicationAppService.GetConfiguration(appId, cfgId);
+        }
+
         [HttpPost("{appId}/addConfiguration")]
 
         public async Task AddConfiguration(string appId, CreateConfigurationInput input)
@@ -67,8 +73,10 @@ namespace AirCC.Portal.Controllers
         }
 
         [HttpGet("{appId}/GetConfigurations")]
-        public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input)
+        public async Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId,
+            [FromQuery] string key, [FromQuery] int pageIndex = 1)
         {
+            var input = new ConfigurationListInput { CfgKey = key, CurrentIndex = pageIndex };
             return await applicationAppService.GetPagedConfigurations(appId, input);
         }
 

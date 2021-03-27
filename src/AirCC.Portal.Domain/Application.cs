@@ -48,7 +48,7 @@ namespace AirCC.Portal.Domain
             return Configurations;
         }
 
-        private ApplicationConfiguration GetConfiguration(string configurationId)
+        public ApplicationConfiguration GetConfiguration(string configurationId)
         {
             var foundConf = Configurations.FirstOrDefault(c => c.Id == configurationId);
             if (foundConf == null)

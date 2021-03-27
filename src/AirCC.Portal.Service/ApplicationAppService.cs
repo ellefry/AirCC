@@ -58,6 +58,13 @@ namespace AirCC.Portal.AppService
             return base.CreateFilteredQuery(input);
         }
 
+        public async Task<ConfigurationListOutput> GetConfiguration(string appId, string cfgId)
+        {
+            var application = await Repository.Table.FirstOrDefaultAsync(a => a.Id == appId);
+            var config = application.GetConfiguration(cfgId);
+            return Mapping.Map<ApplicationConfiguration, ConfigurationListOutput>(config);
+        }
+
         public async Task AddConfiguration(string appId, [NotNull] CreateConfigurationInput input)
         {
             var applicationConfiguration = this.Mapping.Map<CreateConfigurationInput, ApplicationConfiguration>(input);

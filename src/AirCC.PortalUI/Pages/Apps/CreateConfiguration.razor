@@ -1,0 +1,100 @@
+﻿@page "/application/{appId}/AddConfiguration"
+@page "/application/{appId}/UpdateConfiguration/{cfgId}"
+@using AirCC.Portal.AppService.ApplicationDtos;
+@using BCI.Extensions.Mvc.HttpClientJson
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<Row>
+    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsHalf.OnTablet">
+        <Card Margin="Margin.Is2.OnY">
+            <CardHeader>
+                <CardTitle>@PageTitle</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Validations @ref="validations" Mode="ValidationMode.Auto" Model="@createConfiguraionInput" ValidateOnLoad="false">
+
+                    <Field Visibility="Visibility.Never" style="display:none;">
+                        <TextEdit @bind-Text="@createConfiguraionInput.Id"></TextEdit>
+                    </Field>
+
+
+                    <Validation Validator="@ValidationRule.IsNotEmpty">
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is3.OnDesktop">Key</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is9.OnDesktop">
+                                <TextEdit Autofocus="true" Placeholder="" @bind-Text="@createConfiguraionInput.CfgKey"
+                                          Disabled="@update" >
+                                    <Feedback>
+                                        <ValidationError>Name filed is required!</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation Validator="@ValidationRule.IsNotEmpty">
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is3.OnDesktop">Value</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is9.OnDesktop">
+                                <TextEdit  Placeholder="" @bind-Text="@createConfiguraionInput.CfgValue">
+                                    <Feedback>
+                                        <ValidationError>Name filed is required!</ValidationError>
+                                    </Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Field Horizontal="true" JustifyContent="JustifyContent.End">
+                        <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
+                            <Button Color="Color.Primary" Clicked="@Submit">Submit</Button>
+                        </FieldBody>
+                    </Field>
+                </Validations>
+
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
+@code{
+    [Parameter]
+    public string appId { get; set; }
+
+    [Parameter]
+    public string cfgId { get; set; }
+
+    private Validations validations;
+
+    private bool update = false;
+    private string PageTitle { get; set; } = "Add configuration";
+
+    private CreateConfigurationInput createConfiguraionInput = new CreateConfigurationInput();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(cfgId))
+        {
+            update = true;
+            PageTitle = "Update configuration";
+            createConfiguraionInput = await Http.GetFromNewtonJsonAsync<CreateConfigurationInput>($"api/app/{appId}/Configuration/{cfgId}");
+        }
+    }
+
+    private async Task Submit()
+    {
+        if (validations.ValidateAll())
+        {
+            if (update)
+            {
+                await Http.PostAsNewtonJsonAsync($"api/app/{appId}/addConfiguration", createConfiguraionInput);
+            }
+            else
+            {
+                await Http.PostAsNewtonJsonAsync($"api/app/{appId}/UpdateConfiguration", createConfiguraionInput);
+            }
+        }
+        NavManager.NavigateTo($"/application/{appId}/configurations");
+    }
+}

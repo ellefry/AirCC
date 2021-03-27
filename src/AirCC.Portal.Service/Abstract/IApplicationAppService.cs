@@ -14,16 +14,6 @@ namespace AirCC.Portal.AppService.Abstract
         Task OnlineConfiguration(string appId, string cfgId);
         Task<PagedResultDto<ConfigurationListOutput>> GetPagedConfigurations(string appId, ConfigurationListInput input);
         Task Update([NotNull] ApplicationInput applicationInput);
+        Task<ConfigurationListOutput> GetConfiguration(string appId, string cfgId);
     }
-
-    //    public interface IApplicationAppService : IScopedDependency
-    //    {
-    //        Task Create([NotNull] ApplicationInput applicationInput);
-    //        Task CreateConfiguration([NotNull] CreateConfigurationInput input);
-    //        Task OnlinConfiguration(string Id);
-    //        Task OnlineConfigurations(OnlineInput input);
-    //        Task RevertConfiguration(string historyId);
-    //        Task Update([NotNull] ApplicationInput applicationInput);
-    //        Task UpdateConfiguration([NotNull] CreateConfigurationInput input);
-    //    }
 }

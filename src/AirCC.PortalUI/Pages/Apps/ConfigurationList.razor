@@ -1,4 +1,4 @@
-﻿@page "/application"
+﻿@page "/application/{appId}/configurations"
 @using BCI.Extensions.DDD.ApplicationService;
 @using BCI.Extensions.Core.Json;
 @using AirCC.Portal.AppService.ApplicationDtos;
@@ -24,37 +24,51 @@ else
                     <FieldLabel>Name</FieldLabel>
                 </Field>
                 <Field Margin="Margin.Is3.OnX.OnTablet">
-                    <TextEdit Role="TextRole.Text" @bind-text="@Name" Placeholder="Application Name" />
+                    <TextEdit Role="TextRole.Text" @bind-text="@Key" Placeholder="Key" />
                 </Field>
                 <Field>
                     <Button Color="Color.Primary" @onclick=@Search>Search</Button>
                 </Field>
                 <Field Margin="Margin.Is3.OnX.OnTablet" Float="Float.Right">
-                    <Button Color="Color.Primary" @onclick="@(() => NavManager.NavigateTo("/application/create"))">Add Application</Button>
+                    <Button Color="Color.Primary" @onclick="@(() => NavManager.NavigateTo($"/application/{appId}/AddConfiguration"))">Add Configuration</Button>
                 </Field>
             </Inline>
         </Column>
     </Row>
     <br />
-    <TableTemplate TableTitle="Applications" Items="result.DataList" TItem="ApplicationListOutput"
+    <TableTemplate TableTitle="Configurations" Items="result.DataList" TItem="ConfigurationListOutput"
                    TotalCount=result.TotalCount TotalPages=result.TotalPages PageSize=" 10"
                    PageIndex=@result.CurrentIndex OnPaginationItemClick="@OnPageItemClicked">
         <TableHeaderContent>
-            <TableHeaderCell>Name</TableHeaderCell>
-            <TableHeaderCell>ClientSecret</TableHeaderCell>
+            <TableHeaderCell>Key</TableHeaderCell>
+            <TableHeaderCell>Value</TableHeaderCell>
             <TableHeaderCell>Operations</TableHeaderCell>
         </TableHeaderContent>
         <RowTemplate>
-            <TableRowCell>@context.Name</TableRowCell>
-            <TableRowCell>@context.ClientSecret</TableRowCell>
+            <TableRowCell>@context.CfgKey</TableRowCell>
+            <TableRowCell>@context.CfgValue</TableRowCell>
             <TableRowCell>
-                <Button Color="Color.Info" Size="Size.ExtraSmall"
-                        @onclick="@(() => NavManager.NavigateTo($"/application/{context.Id}/configurations"))">
-                    Configurations
-                    <Icon Name="IconName.List"></Icon>
-                </Button>
+                @{
+                    if (context.Status == Portal.Domain.CfgStatus.Offline)
+                    {
+                        <Button Color="Color.Info" Size="Size.ExtraSmall"
+                                @onclick="@(() => NavManager.NavigateTo($"/{appId}/online/{context.Id}"))">
+                            Online
+                            <Icon Name="IconName.ArrowUp"></Icon>
+                        </Button>
+                    }
+                    else
+                    {
+                        <Button Color="Color.Warning" Size="Size.ExtraSmall"
+                                @onclick="@(() => NavManager.NavigateTo($"/{appId}/offline/{context.Id}"))">
+                            Offline
+                            <Icon Name="IconName.ArrowDown"></Icon>
+                        </Button>
+                    }
+                }
+
                 <Button Color="Color.Success" Size="Size.ExtraSmall"
-                        @onclick="@(() => NavManager.NavigateTo($"/application/update/{context.Id}"))">
+                        @onclick="@(() => NavManager.NavigateTo($"/application/{appId}/UpdateConfiguration/{context.Id}"))">
                     Edit
                     <Icon Name="IconName.Edit"></Icon>
                 </Button>
@@ -69,8 +83,11 @@ else
 }
 
 @code {
-    private PagedResultDto<ApplicationListOutput> result;
-    public string Name { get; set; }
+    [Parameter]
+    public string appId { get; set; }
+
+    private PagedResultDto<ConfigurationListOutput> result;
+    public string Key { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,12 +96,12 @@ else
 
     private async Task Search()
     {
-        result = await Query(Name);
+        result = await Query(Key);
     }
 
     private async Task OnPageItemClicked(int pageIndex)
     {
-        result = await Query(Name, pageIndex);
+        result = await Query(Key, pageIndex);
     }
 
     private async Task Delete(string id)
@@ -95,12 +112,11 @@ else
             await Http.DeleteAsync($"api/app/{id}");
             result = await Query();
         }
-        //https://github.com/stsrki/Blazorise/issues/1166
     }
 
-    private async Task<PagedResultDto<ApplicationListOutput>> Query(string name = "", int pageIndex = 1)
+    private async Task<PagedResultDto<ConfigurationListOutput>> Query(string key = "", int pageIndex = 1)
     {
-        return await Http.GetFromNewtonJsonAsync<PagedResultDto<ApplicationListOutput>>($"api/app/pagedList?name={name}&pageIndex={pageIndex}");
+        return await Http.GetFromNewtonJsonAsync<PagedResultDto<ConfigurationListOutput>>($"api/app/{appId}/GetConfigurations?key={key}&pageIndex={pageIndex}");
     }
 
 }
