@@ -52,7 +52,7 @@ else
                     if (context.Status == Portal.Domain.CfgStatus.Offline)
                     {
                         <Button Color="Color.Info" Size="Size.ExtraSmall"
-                                @onclick="@(() => NavManager.NavigateTo($"/{appId}/online/{context.Id}"))">
+                                @onclick="@(() => Online(context.Id))">
                             Online
                             <Icon Name="IconName.ArrowUp"></Icon>
                         </Button>
@@ -60,7 +60,7 @@ else
                     else
                     {
                         <Button Color="Color.Warning" Size="Size.ExtraSmall"
-                                @onclick="@(() => NavManager.NavigateTo($"/{appId}/offline/{context.Id}"))">
+                                @onclick="@(() => Offline(context.Id))">
                             Offline
                             <Icon Name="IconName.ArrowDown"></Icon>
                         </Button>
@@ -112,6 +112,16 @@ else
             await Http.DeleteAsync($"api/app/{id}");
             result = await Query();
         }
+    }
+
+    private async Task Online(string id)
+    {
+        await Http.PostAsync($"/api/app/{appId}/online/{id}", new StringContent("{}"));
+    }
+
+    private async Task Offline(string id)
+    {
+        await Http.PostAsync($"/api/app/{appId}/offline/{id}", new StringContent("{}"));
     }
 
     private async Task<PagedResultDto<ConfigurationListOutput>> Query(string key = "", int pageIndex = 1)
