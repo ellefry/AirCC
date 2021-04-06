@@ -25,12 +25,25 @@ namespace AirCC.Portal.AppService
             this.userService = userService;
         }
 
-        public async Task CreateAdmin([NotNull]CreateAdminInput createAdminInput)
+        public async Task CreateAdmin([NotNull]CreateUserInput createAdminInput)
         {
-            if (!createAdminInput.Valid())
+            if (!createAdminInput.IsPasswordValid())
                 throw new ApplicationException("Password and confirm password mismatch!");
             await userService.Create(createAdminInput.Username, createAdminInput.Password, UserRole.Admin);
             await Repository.SaveChangesAsync();
+        }
+
+        public async Task CreateUser([NotNull] CreateUserInput createAdminInput)
+        {
+            if (!createAdminInput.IsPasswordValid())
+                throw new ApplicationException("Password and confirm password mismatch!");
+            await userService.Create(createAdminInput.Username, createAdminInput.Password, UserRole.Admin);
+            await Repository.SaveChangesAsync();
+        }
+
+        public async Task<bool> Login([NotNull] LoginInput loginDto)
+        {
+            return await userService.ValidateUser(loginDto.Username, loginDto.Password);
         }
 
         public async Task<bool> HasAnyUser()

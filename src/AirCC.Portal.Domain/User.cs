@@ -11,6 +11,11 @@ namespace AirCC.Portal.Domain
         public string Password { get; set; }
         public UserRole Role { get; set; }
 
+        public void SetNormal()
+        {
+            Role = UserRole.Normal;
+        }
+
         public static User Create(string username, string password, UserRole role)
         {
             return new User

@@ -4,12 +4,12 @@ using System.Text;
 
 namespace AirCC.Portal.AppService.Users
 {
-    public class CreateAdminInput
+    public class CreateUserInput
     {
         public string Username { get; set; } = "admin";
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
 
-        public bool Valid() => !string.IsNullOrEmpty(Password) && Password == ConfirmPassword;
+        public bool IsPasswordValid() => !string.IsNullOrEmpty(Password) && Password == ConfirmPassword;
     }
 }

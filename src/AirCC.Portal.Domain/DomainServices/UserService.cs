@@ -26,6 +26,14 @@ namespace AirCC.Portal.Domain.DomainServices
             var user = User.Create(username, hashedPassword, role);
             await repository.InsertAsync(user);
         }
-        
+
+        public async Task<bool> ValidateUser(string username, string password)
+        {
+            var user = (await repository.GetListAsync(u => u.Username.Trim().ToLower() == username.Trim().ToLower())).FirstOrDefault();
+            if (user == null) return false;
+            if (user.Password != cryptoHasher.HashPassword(password)) return false;
+            return true;
+        }
+
     }
 }

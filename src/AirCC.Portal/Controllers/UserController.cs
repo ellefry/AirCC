@@ -17,7 +17,7 @@ namespace AirCC.Portal.Controllers
         { }
 
         [HttpPost]
-        public async Task CreateAdmin(CreateAdminInput input)
+        public async Task CreateAdmin(CreateUserInput input)
         { 
         }
     }
