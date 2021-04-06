@@ -39,6 +39,7 @@ namespace AirCC.Portal.AppService
                 throw new ApplicationException("Password and confirm password mismatch!");
             await userService.Create(createAdminInput.Username, createAdminInput.Password, UserRole.Admin);
             await Repository.SaveChangesAsync();
+            //
         }
 
         public async Task<bool> Login([NotNull] LoginInput loginDto)
