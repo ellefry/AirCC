@@ -127,6 +127,14 @@ namespace AirCC.Portal.AppService
             scope.Complete();
         }
 
+
+        protected override IQueryable<Application> CreatePagedQuery<TGetListInput>(IQueryable<Application> query, TGetListInput input)
+        {
+            var keys = new string[] { "l_key","n_key" };
+
+            var ret = Repository.Table.Where(a => a.Configurations.Select(c => c.CfgKey).Where(c=> keys.Contains(c)).Count() > 0).ToList();
+            return query;
+        }
     }
 }
 

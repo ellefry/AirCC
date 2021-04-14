@@ -15,6 +15,7 @@ namespace AirCC.Portal.EntityFramework
         public virtual DbSet<Application> Applications { get; set; }
         public virtual DbSet<ApplicationConfiguration> ApplicationConfigurations { get; set; }
         public virtual DbSet<ApplicationConfigurationHistory> ApplicationConfigurationHistories { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
