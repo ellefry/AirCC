@@ -1,0 +1,76 @@
+﻿@page "/login"
+@using AirCC.Portal.AppService.Users;
+@using BCI.Extensions.Mvc.HttpClientJson
+@inject HttpClient Http
+@inject NavigationManager NavManager
+@layout LoginLayout
+
+
+    <Column ColumnSize="ColumnSize.Is4.Is4.WithOffset">
+        <Card Margin="Margin.Is4.OnY">
+            <CardHeader>
+                <CardTitle>Login</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.IsFull.OnMobile.IsFull">
+                        <Validations @ref="validations" Mode="ValidationMode.Auto" Model="@loginInput" ValidateOnLoad="false">
+
+                            <Validation Validator="@ValidationRule.IsNotEmpty">
+                                <Field Horizontal="true">
+                                    <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is3.OnDesktop">Name</FieldLabel>
+                                    <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is9.OnDesktop">
+                                        <TextEdit Autofocus="true" Placeholder="" @bind-Text="@loginInput.Username">
+                                            <Feedback>
+                                                <ValidationError>Username filed is required!</ValidationError>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+
+                            <Validation Validator="@ValidationRule.IsNotEmpty">
+                                <Field Horizontal="true">
+                                    <FieldLabel ColumnSize="ColumnSize.IsFull.OnTablet.Is3.OnDesktop">Password</FieldLabel>
+                                    <FieldBody ColumnSize="ColumnSize.IsFull.OnTablet.Is9.OnDesktop">
+                                        <TextEdit Placeholder="" @bind-Text="@loginInput.Password">
+                                            <Feedback>
+                                                <ValidationError>Password filed is required!</ValidationError>
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+
+                            <Validation>
+                                <Field Horizontal="true" JustifyContent="JustifyContent.End">
+                                    <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
+                                        <Check @bind-Checked="@loginInput.IsRememberMe">
+                                            <ChildContent>
+                                                Remember me
+                                            </ChildContent>
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </Check>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Field Horizontal="true" JustifyContent="JustifyContent.End">
+                                <FieldBody ColumnSize="ColumnSize.Is9.Is3.WithOffset">
+                                    <Button Color="Color.Primary">Login</Button>
+                                </FieldBody>
+                            </Field>
+                        </Validations>
+                    </Column>
+                </Row>
+               
+
+            </CardBody>
+        </Card>
+    </Column>
+
+@code {
+    private Validations validations;
+    private LoginInput loginInput = new LoginInput();
+}

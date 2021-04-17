@@ -1,5 +1,4 @@
 ﻿using AirCC.Portal.AppService.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,6 @@ namespace AirCC.Portal.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        //private readonly IPasswordHasher passwordHasher;
         public UserController()
         { }
 

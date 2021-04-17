@@ -1,7 +1,7 @@
+#region usings
 using AirCC.Portal.AppService;
 using AirCC.Portal.AppService.Clients;
 using AirCC.Portal.EntityFramework;
-using AirCC.Portal.Exceptions;
 using AirCC.Portal.Infrastructure.WsServers;
 using AirCC.Portal.WebServers;
 using BCI.Extensions.AutoMapper;
@@ -11,9 +11,10 @@ using BCI.Extensions.Core.ObjectMapping;
 using BCI.Extensions.EFCore;
 using BCI.Extensions.Mvc;
 using BCI.Extensions.Newtonsoft;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -24,6 +25,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
+#endregion
 
 namespace AirCC.Portal
 {
@@ -72,6 +74,14 @@ namespace AirCC.Portal
             //services.AddServerSideBlazor();
             //services.AddControllersWithViews();
             //services.AddRazorPages();
+
+            //security
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                   .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+                   {
+                       o.LoginPath = new PathString("/Login");
+                       o.AccessDeniedPath = new PathString("/Error/Forbidden");
+                   });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -88,6 +98,7 @@ namespace AirCC.Portal
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
             UseSwagger(app);
 
