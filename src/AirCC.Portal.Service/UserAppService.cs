@@ -14,9 +14,11 @@ using System.Threading.Tasks;
 namespace AirCC.Portal.AppService
 {
     public interface IUserAppService : IApplicationServiceBase<User, string>, IScopedDependency
-    { }
+    {
+        Task<bool> Login([NotNull] LoginInput loginDto);
+    }
 
-    public class UserAppService : ApplicationServiceBase<User, string>
+    public class UserAppService : ApplicationServiceBase<User, string>, IUserAppService
     {
         private readonly IUserService userService;
         public UserAppService(IRepository<User, string> repository, IServiceProvider serviceProvider, IUserService userService)

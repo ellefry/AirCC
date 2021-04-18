@@ -9,11 +9,12 @@
     <PackageReference Include="BCI.Extensions.DDD.ApplicationService" Version="0.2021.80.2239" />
     <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AirCC.Client\AirCC.Client.csproj" />
-    <ProjectReference Include="..\AirCC.Portal.Data\AirCC.Portal.EntityFramework.csproj" />
+    
     <ProjectReference Include="..\AirCC.Portal.Domain\AirCC.Portal.Domain.csproj" />
   </ItemGroup>
 

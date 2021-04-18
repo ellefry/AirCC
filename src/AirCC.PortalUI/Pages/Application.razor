@@ -4,6 +4,8 @@
 @using AirCC.Portal.AppService.ApplicationDtos;
 @using BCI.Extensions.Mvc.HttpClientJson
 @using AirCC.PortalUI.Shared.Table
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 
 @inject HttpClient Http
 @inject IJsonSerializer json
@@ -69,6 +71,7 @@ else
 }
 
 @code {
+
     private PagedResultDto<ApplicationListOutput> result;
     public string Name { get; set; }
 

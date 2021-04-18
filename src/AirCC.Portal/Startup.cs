@@ -80,7 +80,7 @@ namespace AirCC.Portal
                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
                    {
                        o.LoginPath = new PathString("/Login");
-                       o.AccessDeniedPath = new PathString("/Error/Forbidden");
+                       //o.AccessDeniedPath = new PathString("/Error/Forbidden");
                    });
         }
 

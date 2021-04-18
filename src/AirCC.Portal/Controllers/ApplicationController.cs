@@ -2,6 +2,7 @@
 using AirCC.Portal.AppService.ApplicationDtos;
 using BCI.Extensions.Core.Json;
 using BCI.Extensions.DDD.ApplicationService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AirCC.Portal.Controllers
 {
+    [Authorize]
     [Route("api/app")]
     [ApiController]
     public class ApplicationController : ControllerBase

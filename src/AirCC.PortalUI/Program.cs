@@ -49,7 +49,7 @@ namespace AirCC.PortalUI
             //builder.Services.AddSingleton<IUnhandledExceptionSender>(unhandledExceptionSender);
 
             builder.Services.AddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
-
+            
             var host = builder.Build();
             host.Services
                 .UseBootstrapProviders()
