@@ -16,6 +16,7 @@ using BCI.Extensions.Newtonsoft;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using AirCC.PortalUI.HttpHandlers;
 
 namespace AirCC.PortalUI
 {
@@ -41,7 +42,14 @@ namespace AirCC.PortalUI
 
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped<CustomAuthorizationMessageHandler>();
+            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            builder.Services.AddScoped(sp => new HttpClient(
+                sp.GetRequiredService<CustomAuthorizationMessageHandler>())
+            {
+                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+            });
 
             //var unhandledExceptionSender = new UnhandledExceptionSender();
             //var unhandledExceptionProvider = new UnhandledExceptionProvider(unhandledExceptionSender);
@@ -70,5 +78,6 @@ namespace AirCC.PortalUI
                 .WriteTo.BrowserHttp(controlLevelSwitch: levelSwitch)
                 .CreateLogger();
         }
+
     }
 }
