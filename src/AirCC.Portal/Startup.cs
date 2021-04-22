@@ -82,7 +82,6 @@ namespace AirCC.Portal
                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
                    {
                        o.LoginPath = new PathString("/Login");
-                       //o.AccessDeniedPath = new PathString("/Error/Forbidden");
                        o.Events.OnRedirectToLogin = context =>
                        {
                            if (context.Request.Path.Value.StartsWith("/api"))
