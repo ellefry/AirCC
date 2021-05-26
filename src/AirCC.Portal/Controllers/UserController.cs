@@ -22,11 +22,10 @@ namespace AirCC.Portal.Controllers
         [HttpPost("login")]
         public async Task Login([FromBody]LoginInput input)
         {
-            if (!await appService.Login(input))
-                throw new ApplicationException("Login failed!");
+            var user = await appService.Login(input);
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-            identity.AddClaim(new Claim(ClaimTypes.Name, input.Username));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "admin"));
+            identity.AddClaim(new Claim(ClaimTypes.Name, user.Username));
+            identity.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
     }

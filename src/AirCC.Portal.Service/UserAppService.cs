@@ -15,7 +15,7 @@ namespace AirCC.Portal.AppService
 {
     public interface IUserAppService : IApplicationServiceBase<User, string>, IScopedDependency
     {
-        Task<bool> Login([NotNull] LoginInput loginDto);
+        Task<UserLoginOutput> Login([NotNull] LoginInput loginDto);
     }
 
     public class UserAppService : ApplicationServiceBase<User, string>, IUserAppService
@@ -44,9 +44,14 @@ namespace AirCC.Portal.AppService
             //
         }
 
-        public async Task<bool> Login([NotNull] LoginInput loginDto)
+        public async Task<UserLoginOutput> Login([NotNull] LoginInput loginDto)
         {
-            return await userService.ValidateUser(loginDto.Username, loginDto.Password);
+            var user = await userService.ValidateUser(loginDto.Username, loginDto.Password);
+            return new UserLoginOutput
+            {
+                Username = user.Username,
+                Role = user.Role
+            };
         }
 
         public async Task<bool> HasAnyUser()

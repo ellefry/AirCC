@@ -28,12 +28,13 @@ namespace AirCC.Portal.Domain.DomainServices
             await repository.InsertAsync(user);
         }
 
-        public async Task<bool> ValidateUser(string username, string password)
+        public async Task<User> ValidateUser(string username, string password)
         {
             var user = (await repository.GetListAsync(u => u.Username.Trim().ToLower() == username.Trim().ToLower())).FirstOrDefault();
-            if (user == null) return false;
-            if (!cryptoHasher.VerifyHashedPassword(user.Password, password)) return false;
-            return true;
+            if (user == null) throw new ApplicationException("Username error!");
+            if (!cryptoHasher.VerifyHashedPassword(user.Password, password))
+                throw new ApplicationException("Password error!");
+            return user;
         }
 
     }

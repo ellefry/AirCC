@@ -9,6 +9,6 @@ namespace AirCC.Portal.Domain.DomainServices.Abstract
     public interface IUserService : IScopedDependency
     {
         Task Create(string username, string password, UserRole role);
-        Task<bool> ValidateUser(string username, string password);
+        Task<User> ValidateUser(string username, string password);
     }
 }
