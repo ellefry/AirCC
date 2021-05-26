@@ -6,43 +6,29 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
 
 namespace AirCC.PortalUI.HttpHandlers
 {
     public class CustomAuthorizationMessageHandler : DelegatingHandler
     {
-        public CustomAuthorizationMessageHandler(HttpMessageHandler innerHandler=null)
+        private readonly NavigationManager navManager;
+        public CustomAuthorizationMessageHandler(NavigationManager navManager, HttpMessageHandler innerHandler=null)
         {
-            InnerHandler = InnerHandler = innerHandler ?? new HttpClientHandler(); ;
+            InnerHandler = InnerHandler = innerHandler ?? new HttpClientHandler();
+            this.navManager = navManager;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if(request.RequestUri.ToString().Contains("Login?ReturnUrl"))
-                throw new ApplicationException(request.RequestUri.ToString());
             var response = await base.SendAsync(request, cancellationToken);
             var status = response.StatusCode;
-            if (status == HttpStatusCode.Redirect) throw new ApplicationException(status.ToString());
-            Console.WriteLine(status);
+            if (status == HttpStatusCode.Unauthorized) //throw new ApplicationException(status.ToString());
+            {
+                navManager.NavigateTo("login");
+            }
             return response;
         }
     }
 
-    public class ExampleHttpHandler : DelegatingHandler
-    {
-        public ExampleHttpHandler(HttpMessageHandler innerHandler)
-        {
-            //the last (inner) handler in the pipeline should be a "real" handler.
-            //To make a HTTP request, create a HttpClientHandler instance.
-            InnerHandler = innerHandler ?? new HttpClientHandler();
-        }
-
-        protected override async Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
-        {
-            //add any logic here
-            return await base.SendAsync(request, cancellationToken);
-        }
-    }
 }
