@@ -28,6 +28,12 @@ namespace AirCC.Portal.Domain.DomainServices
             await repository.InsertAsync(user);
         }
 
+        /// <summary>
+        /// validate
+        /// </summary>
+        /// <param name="username">admin/admin</param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public async Task<User> ValidateUser(string username, string password)
         {
             var user = (await repository.GetListAsync(u => u.Username.Trim().ToLower() == username.Trim().ToLower())).FirstOrDefault();
